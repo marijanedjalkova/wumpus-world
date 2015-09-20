@@ -12,11 +12,17 @@ public class Board {
 	private void initialize() {
 		//create empty cells
 		boardObject = new Cell[size][size];
+		for (int i = 0; i < size; i++){
+			for (int j = 0; j < size; j++){
+				boardObject[i][j] = new Cell(i, j);
+			}
+		}
 		
 		//place an adventurer
 		Random rn = new Random();
 		int playerX = rn.nextInt(size);
 		int playerY = rn.nextInt(size);
+
 		Adventurer player = new Adventurer(playerX, playerY);
 		boardObject[playerX][playerY].setAdventurer(player);
 		
