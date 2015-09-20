@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class Game {
 	private boolean finished;
@@ -10,28 +11,48 @@ public class Game {
 		gBoard = new Board(10, this, complexity);
 		System.out.println("Board initialised");
 		gBoard.print();
-		System.out.println(player.xPos);
-		System.out.println(player.yPos);
 		finished = false;
 		stepCount = 0;
 	}
-	
-	public boolean isFinished(){
-		return finished;
-	}
+
 	
 	public int getStepCount(){
 		return stepCount;
 	}
 	
+	public boolean process(char move){
+		switch(move){
+		case 'n':
+			;
+			break;
+		case 'e':
+			;
+			break;
+		case 's':
+			;
+			break;
+		case 'w':
+			;
+			break;
+		default:
+			System.out.println("Not valid, try again");
+			return false;
+		}
+		return true;
+	}
+	
 	public void start(){
+		Scanner user_input = new Scanner( System.in );
+		char move;		
 		while (!finished){
 			//take a step
-			//move the object
-			//process new data
-			//check that is not lost
-			finished = true;
+			System.out.println("Your step:");
+			move = user_input.next().charAt(0);
+			if (!process(move))
+				continue;
+			stepCount++;
 		}
+		user_input.close();
 	}
 	
 }
