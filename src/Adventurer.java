@@ -1,17 +1,12 @@
 
-public class Adventurer {
+public class Adventurer extends MovingObject{
 
-	int x_pos;
-    int y_pos;
     
-    void move(char d){
-    	switch (d){
-    	case 'N': ; break;
-    	case 'S': ; break;
-    	case 'W': ; break;
-    	case 'E': ; break;
-    	}
+    public Adventurer(int x, int y){
+    	super(x, y);
+    	
     }
+    
     
     public void die(){
     	System.out.println("Sorry, you lost!");

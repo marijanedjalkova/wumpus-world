@@ -11,4 +11,13 @@ public class Board {
 	private void initialize(){
 		
 	}
+	
+	public void move(MovingObject object, char d){
+		switch (d){
+		case 'N': ; break;
+		case 'S': ; break;
+		case 'W': ; break;
+		case 'E': ; break;
+		}
+	}
 }
