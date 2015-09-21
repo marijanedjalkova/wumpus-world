@@ -45,10 +45,10 @@ public abstract class Cell {
 	public boolean smells(){
 		//check if there is wumpus around
 		Location wumpusLocation = board.game.wumpus.getLocation();
-		if (board.getNorth(location) == wumpusLocation) return true;
-		if (board.getSouth(location) == wumpusLocation) return true;
-		if (board.getEast(location) == wumpusLocation) return true;
-		if (board.getWest(location) == wumpusLocation) return true;
+		if (board.getNorth(location).equalsTo(wumpusLocation)) return true;
+		if (board.getSouth(location).equalsTo(wumpusLocation)) return true;
+		if (board.getEast(location).equalsTo(wumpusLocation)) return true;
+		if (board.getWest(location).equalsTo(wumpusLocation)) return true;
 		return false;		
 	}
 	
