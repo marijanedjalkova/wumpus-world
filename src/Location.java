@@ -1,5 +1,5 @@
 
-public class Location implements Comparable<Location>{
+public class Location{
 	private int x;
 	private int y;
 	
@@ -15,11 +15,13 @@ public class Location implements Comparable<Location>{
 	public int getY(){
 		return y;
 	}
-
+	
+	public boolean equalsTo(Location l){
+		return x == l.getX() && y == l.getY();
+	}
+	
 	@Override
-	public int compareTo(Location l) {
-		if (x == l.getX() && y == l.getY())
-				return 1;
-		return 0;
+	public String toString(){
+		return "(" + x + "," + y + ")";
 	}
 }

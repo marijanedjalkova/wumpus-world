@@ -16,6 +16,9 @@ public class Game {
 		superBat = new SuperBat();
 		gBoard = new Board(size, this, complexity);
 		System.out.println("Board initialised");
+		System.out.println("Player: " + player.location.toString());
+		System.out.println("W: " + wumpus.location.toString());
+		System.out.println("sB: " + superBat.location.toString());
 		gBoard.print();
 		finished = false;
 		stepCount = 0;

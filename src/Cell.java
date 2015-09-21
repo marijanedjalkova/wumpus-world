@@ -20,7 +20,25 @@ public abstract class Cell {
 	
 	public void print(){
 		System.out.print("<");
-		//TODO
+		if (this instanceof TreasureCell)
+			System.out.print("T");
+		if (this instanceof ExitCell)
+			System.out.print("E");
+		if (this instanceof PitCell)
+			System.out.print("P");
+
+		if (board.game.player.getLocation().equalsTo(location))
+			System.out.print("A");
+		if (board.game.wumpus.getLocation().equalsTo(location))
+			System.out.print("W");
+		if (board.game.superBat.getLocation().equalsTo(location))
+			System.out.print("B");
+		if (smells())
+			System.out.print("sm");
+		if (breezes())
+			System.out.print("br");
+		if (glitters())
+			System.out.print("gl");
 		System.out.print(">");
 	}
 	

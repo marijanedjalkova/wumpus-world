@@ -11,6 +11,7 @@ public class Board {
 
 	public Board(int size, Game g, int complexity) {
 		this.size = size;
+		pitCells = new ArrayList<PitCell>();
 		game = g;
 		initialize(complexity);
 
