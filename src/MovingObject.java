@@ -7,7 +7,7 @@ public abstract class MovingObject {
     }
     
     public MovingObject(){
-    	
+    	this(0, 0);
     }
     
     public void setLocation(Location l){

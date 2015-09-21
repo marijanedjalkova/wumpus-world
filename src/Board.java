@@ -50,18 +50,31 @@ public class Board {
 	
 	private Location findPlayerFree(){
 		Random rn = new Random();
-		int wumpusX = 0;
-		int wumpusY = 0;
+		int x = 0;
+		int y = 0;
 		Location l;
 		do {
-			wumpusX = rn.nextInt(size);
-			wumpusY = rn.nextInt(size);
-			l = new Location(wumpusX, wumpusY);
+			x = rn.nextInt(size);
+			y = rn.nextInt(size);
+			l = new Location(x, y);
 		} while (game.player.getLocation() == l);
 		return l;
 	}
 	
-
+	private Location findFree(){
+		Random rn = new Random();
+		int x = 0;
+		int y = 0;
+		Location l;
+		do {
+			x = rn.nextInt(size);
+			y = rn.nextInt(size);
+			l = new Location(x, y);
+		} while (game.player.getLocation() == l
+				|| game.wumpus.getLocation() == l
+				|| game.superBat.getLocation() ==l);
+		return l;
+	}
 	
 	public void print(){
 		for (int i = 0; i < size; i++){
@@ -73,40 +86,20 @@ public class Board {
 	}
 	
 	private void placePits(int amount){
-		Random rn = new Random();
 		for (int i = 0; i < amount; i++){
-			int pitX = 0;
-			int pitY = 0;
-			do{
-				pitX = rn.nextInt(size);
-				pitY = rn.nextInt(size);
-			} while (boardObject[pitX][pitY].isAdventurer || boardObject[pitX][pitY].isWumpus);
-			boardObject[pitX][pitY].isPit = true;
-			
+			Location l = findFree();
+			boardObject[l.getX()][l.getY()] = new PitCell(l);
 		}
 	}
 	
 	private void placeExit(){
-		Random rn = new Random();
-				int exitX = 0;
-				int exitY = 0;
-				do {
-					exitX = rn.nextInt(size);
-					exitY = rn.nextInt(size);
-				} while (boardObject[exitX][exitY].isAdventurer);
-				boardObject[exitX][exitY].isExit = true;
+		Location l = findFree();
+		boardObject[l.getX()][l.getY()] = new ExitCell(l);
 	}
 	
 	private void placeTreasure(){
-		//place treasure
-		Random rn = new Random();
-		int treasureX = 0;
-		int treasureY = 0;
-		do {
-			treasureX = rn.nextInt(size);
-			treasureY = rn.nextInt(size);
-		} while (boardObject[treasureX][treasureY].isAdventurer);
-		boardObject[treasureX][treasureY].isTreasure = true;
+		Location l = findFree();
+		boardObject[l.getX()][l.getY()] = new TreasureCell(l);
 	}
 
 	private Location getSouth(Location l){
