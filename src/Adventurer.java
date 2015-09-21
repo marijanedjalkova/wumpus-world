@@ -15,6 +15,7 @@ public class Adventurer extends MovingObject{
     
     public void shoot(char d){
     	switch (d){
+    	//TODO
     	case 'N': ; break;
     	case 'S': ; break;
     	case 'W': ; break;

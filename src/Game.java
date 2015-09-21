@@ -23,16 +23,10 @@ public class Game {
 	public boolean process(char move){
 		switch(move){
 		case 'n':
-			;
-			break;
 		case 'e':
-			;
-			break;
 		case 's':
-			;
-			break;
 		case 'w':
-			;
+			gBoard.move(player, move);
 			break;
 		default:
 			System.out.println("Not valid, try again");
