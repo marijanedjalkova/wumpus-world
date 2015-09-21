@@ -1,9 +1,13 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
-	int size;
-	Cell[][] boardObject;
+	private int size;
+	private Cell[][] boardObject;
 	Game game;
+	public TreasureCell treasure;
+	public ExitCell exit;
+	public ArrayList<PitCell> pitCells;
 
 	public Board(int size, Game g, int complexity) {
 		this.size = size;
@@ -88,39 +92,49 @@ public class Board {
 	private void placePits(int amount){
 		for (int i = 0; i < amount; i++){
 			Location l = findFree();
-			boardObject[l.getX()][l.getY()] = new PitCell(l, this);
+			PitCell newPit = new PitCell(l, this);
+			pitCells.add(newPit);
+			boardObject[l.getX()][l.getY()] = newPit;
 		}
 	}
 	
 	private void placeExit(){
 		Location l = findFree();
-		boardObject[l.getX()][l.getY()] = new ExitCell(l, this);
+		ExitCell newExit = new ExitCell(l, this);
+		exit = newExit;
+		boardObject[l.getX()][l.getY()] = exit;
 	}
 	
 	private void placeTreasure(){
 		Location l = findFree();
-		boardObject[l.getX()][l.getY()] = new TreasureCell(l, this);
+		TreasureCell newTreasure = new TreasureCell(l, this);
+		treasure = newTreasure;
+		boardObject[l.getX()][l.getY()] = treasure;
+	}
+	
+	public Cell getCell(Location l){
+		return boardObject[l.getX()][l.getY()];
 	}
 
-	private Location getSouth(Location l){
+	public Location getSouth(Location l){
 		if (l.getY() < size - 1)
 			return new Location(l.getX(), l.getY() + 1);
 		return new Location(l.getX(), 0);
 	}
 	
-	private Location getNorth(Location l){
+	public Location getNorth(Location l){
 		if (l.getY() > 0)
 			return new Location(l.getX(), l.getY() - 1);
 		return new Location(l.getX(), size - 1);
 	}
 	
-	private Location getEast(Location l){
+	public Location getEast(Location l){
 		if (l.getX() < size - 1)
 			return new Location(l.getX() + 1, l.getY());
 		return new Location(0, l.getY());		
 	}
 	
-	private Location getWest(Location l){
+	public Location getWest(Location l){
 		if (l.getX() > 0)
 			return new Location (l.getX() - 1, l.getY());
 		return new Location(size - 1, l.getY());
