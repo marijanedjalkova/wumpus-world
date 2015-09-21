@@ -18,7 +18,7 @@ public class Board {
 		boardObject = new Cell[size][size];
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++)
-				boardObject[i][j] = new EmptyCell(i, j);
+				boardObject[i][j] = new EmptyCell(i, j, this);
 		}
 
 		placeAdventurer();
@@ -88,18 +88,18 @@ public class Board {
 	private void placePits(int amount){
 		for (int i = 0; i < amount; i++){
 			Location l = findFree();
-			boardObject[l.getX()][l.getY()] = new PitCell(l);
+			boardObject[l.getX()][l.getY()] = new PitCell(l, this);
 		}
 	}
 	
 	private void placeExit(){
 		Location l = findFree();
-		boardObject[l.getX()][l.getY()] = new ExitCell(l);
+		boardObject[l.getX()][l.getY()] = new ExitCell(l, this);
 	}
 	
 	private void placeTreasure(){
 		Location l = findFree();
-		boardObject[l.getX()][l.getY()] = new TreasureCell(l);
+		boardObject[l.getX()][l.getY()] = new TreasureCell(l, this);
 	}
 
 	private Location getSouth(Location l){

@@ -1,13 +1,16 @@
 
 public abstract class Cell {
-	private Location location;
+	protected Location location;
+	protected Board board;
 
 	
-	public Cell(int x, int y){
+	public Cell(int x, int y, Board b){
+		board = b;
 		location = new Location(x, y);
 	}
 	
-	public Cell(Location l){
+	public Cell(Location l, Board b){
+		board = b;
 		location = l;
 	}
 	
@@ -23,6 +26,7 @@ public abstract class Cell {
 	
 	public boolean smells(){
 		//check if there is wumpus around 
+		
 	}
 	
 	public boolean glitters(){

@@ -1,12 +1,12 @@
 
 public class ExitCell extends Cell {
 
-	public ExitCell(int x, int y) {
-		super(x, y);
+	public ExitCell(int x, int y, Board b) {
+		super(x, y, b);
 	}
 	
-	public ExitCell(Location l) {
-		super(l);
+	public ExitCell(Location l, Board b) {
+		super(l, b);
 	}
 
 }

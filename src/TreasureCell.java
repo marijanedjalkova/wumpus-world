@@ -1,11 +1,11 @@
 
 public class TreasureCell extends Cell {
 
-	public TreasureCell(int x, int y) {
-		super(x, y);
+	public TreasureCell(int x, int y, Board b) {
+		super(x, y, b);
 	}
 	
-	public TreasureCell(Location l) {
-		super(l);
+	public TreasureCell(Location l, Board b) {
+		super(l, b);
 	}
 }
