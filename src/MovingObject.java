@@ -1,10 +1,22 @@
 
 public abstract class MovingObject {
-    protected int xPos;
-    protected int yPos;
+    protected Location location;
     
     public MovingObject(int x, int y){
-    	xPos = x;
-    	yPos = y;
+    	location = new Location(x, y);
     }
+    
+    public MovingObject(){
+    	
+    }
+    
+    public void setLocation(Location l){
+    	location = l;
+    }
+    
+    public Location getLocation(){
+    	return location;
+    }
+    
+   
 }

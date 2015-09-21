@@ -7,6 +7,10 @@ public class Adventurer extends MovingObject{
     	
     }
     
+    public Adventurer(){
+    	super();
+    }
+    
     
     public void die(){
     	System.out.println("Sorry, you lost!");

@@ -18,28 +18,57 @@ public class Board {
 		boardObject = new Cell[size][size];
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++)
-				boardObject[i][j] = new Cell(i, j);
+				boardObject[i][j] = new EmptyCell(i, j);
 		}
 
 		placeAdventurer();
 		placeWumpus();
+		placeBat();
+		
 		placeExit();
 		placeTreasure();
 		placePits(size * complexity / 5);
-		placeBats(size * complexity / 10);
+	}
+	
+	private void placeAdventurer(){
+		Random rn = new Random();
+		int playerX = rn.nextInt(size);
+		int playerY = rn.nextInt(size);
+		game.player.setLocation(new Location(playerX, playerY));
+	}
+	
+	private void placeWumpus(){
+		Location l = findPlayerFree();
+		game.wumpus.setLocation(l);
 	}
 	
 	
-	private void placeBats(int amount){
+	private void placeBat(){
+		Location l = findPlayerFree();
+		game.superBat.setLocation(l);
+	}
+	
+	private Location findPlayerFree(){
 		Random rn = new Random();
-		for (int i = 0; i < amount; i++){
-			int batX = 0;
-			int batY = 0;
-			do{
-				batX = rn.nextInt(size);
-				batY = rn.nextInt(size);
-			} while (boardObject[batX][batY].isAdventurer || boardObject[batX][batY].isPit);
-			boardObject[batX][batY].isBat = true;
+		int wumpusX = 0;
+		int wumpusY = 0;
+		Location l;
+		do {
+			wumpusX = rn.nextInt(size);
+			wumpusY = rn.nextInt(size);
+			l = new Location(wumpusX, wumpusY);
+		} while (game.player.getLocation() == l);
+		return l;
+	}
+	
+
+	
+	public void print(){
+		for (int i = 0; i < size; i++){
+			for (int j = 0; j < size; j++){
+				boardObject[j][i].print();
+			}
+			System.out.println();
 		}
 	}
 	
@@ -54,46 +83,7 @@ public class Board {
 			} while (boardObject[pitX][pitY].isAdventurer || boardObject[pitX][pitY].isWumpus);
 			boardObject[pitX][pitY].isPit = true;
 			
-			boardObject[pitX][getNorth(pitY)].breezes();
-			boardObject[pitX][getSouth(pitY)].breezes();
-			boardObject[getEast(pitX)][pitY].breezes();
-			boardObject[getWest(pitX)][pitY].breezes();
 		}
-	}
-	
-	public void print(){
-		for (int i = 0; i < size; i++){
-			for (int j = 0; j < size; j++){
-				boardObject[j][i].print();
-			}
-			System.out.println();
-		}
-	}
-	
-	private void placeAdventurer(){
-		Random rn = new Random();
-		int playerX = rn.nextInt(size);
-		int playerY = rn.nextInt(size);
-		boardObject[playerX][playerY].isAdventurer = true;
-		game.player= new Adventurer(playerX, playerY);
-	}
-	
-	private void placeWumpus(){
-		Random rn = new Random();
-		int wumpusX = 0;
-		int wumpusY = 0;
-		do {
-			wumpusX = rn.nextInt(size);
-			wumpusY = rn.nextInt(size);
-		} while (boardObject[wumpusX][wumpusY].isAdventurer);
-
-		boardObject[wumpusX][wumpusY].isWumpus = true;
-		
-		//place stink
-		boardObject[wumpusX][getNorth(wumpusY)].smells();
-		boardObject[wumpusX][getSouth(wumpusY)].smells();
-		boardObject[getEast(wumpusX)][wumpusY].smells();
-		boardObject[getWest(wumpusX)][wumpusY].smells();
 	}
 	
 	private void placeExit(){
@@ -117,51 +107,46 @@ public class Board {
 			treasureY = rn.nextInt(size);
 		} while (boardObject[treasureX][treasureY].isAdventurer);
 		boardObject[treasureX][treasureY].isTreasure = true;
-
-		//place glitter
-		boardObject[treasureX][getNorth(treasureY)].glitters();
-		boardObject[treasureX][getSouth(treasureY)].glitters();
-		boardObject[getEast(treasureX)][treasureY].glitters();
-		boardObject[getWest(treasureX)][treasureY].glitters();
 	}
 
-	private int getNorth(int y){
-		if (y < size - 1)
-			return y + 1;
-		return 0;
+	private Location getSouth(Location l){
+		if (l.getY() < size - 1)
+			return new Location(l.getX(), l.getY() + 1);
+		return new Location(l.getX(), 0);
 	}
 	
-	private int getSouth(int y){
-		if (y > 0)
-			return y - 1;
-		return size - 1;
+	private Location getNorth(Location l){
+		if (l.getY() > 0)
+			return new Location(l.getX(), l.getY() - 1);
+		return new Location(l.getX(), size - 1);
 	}
 	
-	private int getEast(int x){
-		if (x < size - 1)
-			return x + 1;
-		return 0;		
+	private Location getEast(Location l){
+		if (l.getX() < size - 1)
+			return new Location(l.getX() + 1, l.getY());
+		return new Location(0, l.getY());		
 	}
 	
-	private int getWest(int x){
-		if (x > 0)
-			return x - 1;
-		return size - 1;
+	private Location getWest(Location l){
+		if (l.getX() > 0)
+			return new Location (l.getX() - 1, l.getY());
+		return new Location(size - 1, l.getY());
 	}
 	
 	public void move(MovingObject object, char d) {
+		Location curLoc = object.getLocation();
 		switch (d) {
 		case 'N':
-			;
+			object.setLocation(getNorth(curLoc));
 			break;
 		case 'S':
-			;
+			object.setLocation(getSouth(curLoc));
 			break;
 		case 'W':
-			;
+			object.setLocation(getWest(curLoc));
 			break;
 		case 'E':
-			;
+			object.setLocation(getEast(curLoc));
 			break;
 		}
 	}

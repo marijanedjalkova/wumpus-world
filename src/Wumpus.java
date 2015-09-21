@@ -5,6 +5,12 @@ public class Wumpus extends MovingObject{
 		super(x, y);
 		
 	}
+	
+	public Wumpus() {
+		super();
+		
+	}
+
 
 	
 }

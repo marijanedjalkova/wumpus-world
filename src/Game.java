@@ -5,10 +5,16 @@ public class Game {
 	private Board gBoard;
 	private int stepCount;
 	public Adventurer player;
+	public Wumpus wumpus;
+	public SuperBat superBat;
 	
 	
 	public Game(int complexity){
-		gBoard = new Board(10, this, complexity);
+		int size = 10;
+		player = new Adventurer();
+		wumpus = new Wumpus();
+		superBat = new SuperBat();
+		gBoard = new Board(size, this, complexity);
 		System.out.println("Board initialised");
 		gBoard.print();
 		finished = false;
