@@ -39,27 +39,38 @@ public class Game {
 		return true;
 	}
 	
+	private void lost(){
+		System.out.println("Sorry, you lost!");
+		finished = true;
+	}
+	
+	private void won(){
+		System.out.println("Congratulations, you won!");
+		finished = true;
+	}
+	
 	public void checkNewState(){
 		Location newLocation = player.getLocation();
 		if (newLocation.equalsTo(wumpus.getLocation())){
-			player.die();
-			finished = true;
+			lost();
 			return;
 		}
 		if (newLocation.equalsTo(superBat.getLocation())){
 			superBat.move();
 		}
 		if (gBoard.getCell(newLocation) instanceof TreasureCell){
-			win();
+			player.collectTreasure();
 			return;
 		}
 		if (gBoard.getCell(newLocation) instanceof PitCell){
-			player.die();
-			finished = true;
+			lost();
 			return;
 		}
 		if (gBoard.getCell(newLocation) instanceof ExitCell){
-			gBoard.exit.process();
+			if (player.collectedTreasure()){
+				won();
+				return;
+			}
 		}
 		if (gBoard.getCell(newLocation).smells()){
 			System.out.println("This cell smells!");
@@ -88,6 +99,7 @@ public class Game {
 			if (!process(move))
 				continue;
 			stepCount++;
+			checkNewState();
 		}
 		user_input.close();
 	}

@@ -9,8 +9,5 @@ public class ExitCell extends Cell {
 		super(l, b);
 	}
 	
-	public void process(){
-		//TODO
-	}
 
 }

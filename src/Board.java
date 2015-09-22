@@ -13,9 +13,7 @@ public class Board {
 		this.size = size;
 		pitCells = new ArrayList<PitCell>();
 		game = g;
-		initialize(complexity);
-
-		
+		initialize(complexity);	
 	}
 
 	public void initialize(int complexity) {
@@ -178,8 +176,6 @@ public class Board {
 				game.superBat.setLocation(getEast(curLoc));
 			break;
 		}
-		System.out.println(object.getLocation());
-		game.checkNewState();
 	}
 	
 }
