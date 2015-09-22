@@ -143,20 +143,44 @@ public class Board {
 	
 	public void move(MovingObject object, char d) {
 		Location curLoc = object.getLocation();
+		System.out.println(curLoc);
 		switch (d) {
-		case 'N':
-			object.setLocation(getNorth(curLoc));
+		case 'n':
+			if (object instanceof Adventurer){
+				System.out.println("here");
+				game.player.setLocation(getNorth(curLoc));
+			}
+			if (object instanceof Wumpus)
+				game.wumpus.setLocation(getNorth(curLoc));
+			if (object instanceof SuperBat)
+				game.superBat.setLocation(getNorth(curLoc));
 			break;
-		case 'S':
-			object.setLocation(getSouth(curLoc));
+		case 's':
+			if (object instanceof Adventurer)
+				game.player.setLocation(getSouth(curLoc));
+			if (object instanceof Wumpus)
+				game.wumpus.setLocation(getSouth(curLoc));
+			if (object instanceof SuperBat)
+				game.superBat.setLocation(getSouth(curLoc));
 			break;
-		case 'W':
-			object.setLocation(getWest(curLoc));
+		case 'w':
+			if (object instanceof Adventurer)
+				game.player.setLocation(getWest(curLoc));
+			if (object instanceof Wumpus)
+				game.wumpus.setLocation(getWest(curLoc));
+			if (object instanceof SuperBat)
+				game.superBat.setLocation(getWest(curLoc));
 			break;
-		case 'E':
-			object.setLocation(getEast(curLoc));
+		case 'e':
+			if (object instanceof Adventurer)
+				game.player.setLocation(getEast(curLoc));
+			if (object instanceof Wumpus)
+				game.wumpus.setLocation(getEast(curLoc));
+			if (object instanceof SuperBat)
+				game.superBat.setLocation(getEast(curLoc));
 			break;
 		}
+		System.out.println(object.getLocation());
 		game.checkNewState();
 	}
 	

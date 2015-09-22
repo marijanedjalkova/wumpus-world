@@ -15,8 +15,6 @@ public class Game {
 		wumpus = new Wumpus();
 		superBat = new SuperBat();
 		gBoard = new Board(size, this, complexity);
-		System.out.println("Board initialised");
-		gBoard.print();
 		finished = false;
 		stepCount = 0;
 	}
@@ -84,6 +82,7 @@ public class Game {
 		char move;		
 		while (!finished){
 			//take a step
+			gBoard.print();
 			System.out.println("Your step:");
 			move = user_input.next().charAt(0);
 			if (!process(move))
