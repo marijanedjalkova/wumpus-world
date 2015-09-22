@@ -146,10 +146,8 @@ public class Board {
 		System.out.println(curLoc);
 		switch (d) {
 		case 'n':
-			if (object instanceof Adventurer){
-				System.out.println("here");
+			if (object instanceof Adventurer)
 				game.player.setLocation(getNorth(curLoc));
-			}
 			if (object instanceof Wumpus)
 				game.wumpus.setLocation(getNorth(curLoc));
 			if (object instanceof SuperBat)
