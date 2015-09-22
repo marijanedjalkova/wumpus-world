@@ -1,6 +1,6 @@
 
 public abstract class MovingObject {
-    protected Location location;
+    private Location location;
     
     public MovingObject(int x, int y){
     	location = new Location(x, y);

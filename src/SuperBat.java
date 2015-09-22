@@ -9,5 +9,9 @@ public class SuperBat extends MovingObject {
 	public SuperBat(){
 		super();
 	}
+	
+	public void move(){
+		//TODO
+	}
 
 }

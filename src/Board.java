@@ -157,6 +157,7 @@ public class Board {
 			object.setLocation(getEast(curLoc));
 			break;
 		}
+		game.checkNewState();
 	}
 	
 }

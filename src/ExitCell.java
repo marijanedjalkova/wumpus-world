@@ -8,5 +8,9 @@ public class ExitCell extends Cell {
 	public ExitCell(Location l, Board b) {
 		super(l, b);
 	}
+	
+	public void process(){
+		//TODO
+	}
 
 }
