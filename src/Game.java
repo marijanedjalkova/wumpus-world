@@ -44,9 +44,15 @@ public class Game {
 		finished = true;
 	}
 	
-	private void won(){
-		System.out.println("Congratulations, you won!");
-		finished = true;
+	private boolean won(){
+		if (gBoard.getCell(player.getLocation()) instanceof ExitCell){
+			if (player.collectedTreasure()){
+				System.out.println("Congratulations, you won!");
+				finished = true;
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void checkNewState(){
@@ -55,22 +61,20 @@ public class Game {
 			lost();
 			return;
 		}
+		if (gBoard.getCell(newLocation) instanceof PitCell){
+			lost();
+			return;
+		}
+		
 		if (newLocation.equalsTo(superBat.getLocation())){
-			superBat.move();
+			superBat.move(player, gBoard);
 		}
 		if (gBoard.getCell(newLocation) instanceof TreasureCell){
 			player.collectTreasure();
 			return;
 		}
-		if (gBoard.getCell(newLocation) instanceof PitCell){
-			lost();
+		if (won()){
 			return;
-		}
-		if (gBoard.getCell(newLocation) instanceof ExitCell){
-			if (player.collectedTreasure()){
-				won();
-				return;
-			}
 		}
 		if (gBoard.getCell(newLocation).smells()){
 			System.out.println("This cell smells!");
@@ -83,10 +87,6 @@ public class Game {
 		}
 	}
 	
-	public void win(){
-		System.out.println("Confratulations, you won!");
-		finished = true;
-	}
 	
 	public void start(){
 		Scanner user_input = new Scanner( System.in );

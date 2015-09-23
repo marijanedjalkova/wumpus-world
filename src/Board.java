@@ -178,4 +178,8 @@ public class Board {
 		}
 	}
 	
+	public int getSize(){
+		return size;
+	}
+	
 }
