@@ -23,60 +23,55 @@ public class Board {
 			for (int j = 0; j < size; j++)
 				boardObject[i][j] = new EmptyCell(i, j, this);
 		}
+		
+		//place landscape
+		placeExit();
+		placeTreasure();
+		placePits(size * complexity / 5);
 
+		//place characters
 		placeAdventurer();
 		placeWumpus();
 		placeBat();
 		
-		placeExit();
-		placeTreasure();
-		placePits(size * complexity / 5);
+
 	}
 	
 	private void placeAdventurer(){
-		Random rn = new Random();
-		int playerX = rn.nextInt(size);
-		int playerY = rn.nextInt(size);
-		game.player.setLocation(new Location(playerX, playerY));
+		Location l = findEmptyFree();
+		game.player.setLocation(l);
 	}
 	
 	private void placeWumpus(){
-		Location l = findPlayerFree();
+		Location l = findEmptyFree();
 		game.wumpus.setLocation(l);
 	}
 	
 	
 	private void placeBat(){
-		Location l = findPlayerFree();
+		Location l = findEmptyFree();
 		game.superBat.setLocation(l);
 	}
 	
-	private Location findPlayerFree(){
-		Random rn = new Random();
-		int x = 0;
-		int y = 0;
+	//not only an empty cell, but also with no other characters on it
+	private Location findEmptyFree(){
 		Location l;
 		do {
-			x = rn.nextInt(size);
-			y = rn.nextInt(size);
-			l = new Location(x, y);
-		} while (game.player.getLocation() == l);
+			l = findEmpty();
+		} while (game.player.getLocation().equalsTo(l) || game.wumpus.getLocation().equalsTo(l)
+				|| game.superBat.getLocation().equalsTo(l));
 		return l;
 	}
 	
-	private Location findFree(){
+	private Location findEmpty(){
 		Random rn = new Random();
 		int x = 0;
 		int y = 0;
-		Location l;
 		do {
 			x = rn.nextInt(size);
 			y = rn.nextInt(size);
-			l = new Location(x, y);
-		} while (game.player.getLocation() == l
-				|| game.wumpus.getLocation() == l
-				|| game.superBat.getLocation() ==l);
-		return l;
+		} while (!(boardObject[x][y] instanceof EmptyCell));
+		return new Location(x, y);
 	}
 	
 	public void print(){
@@ -93,7 +88,7 @@ public class Board {
 	
 	private void placePits(int amount){
 		for (int i = 0; i < amount; i++){
-			Location l = findFree();
+			Location l = findEmpty();
 			PitCell newPit = new PitCell(l, this);
 			pitCells.add(newPit);
 			boardObject[l.getX()][l.getY()] = newPit;
@@ -101,14 +96,14 @@ public class Board {
 	}
 	
 	private void placeExit(){
-		Location l = findFree();
+		Location l = findEmpty();
 		ExitCell newExit = new ExitCell(l, this);
 		exit = newExit;
 		boardObject[l.getX()][l.getY()] = exit;
 	}
 	
 	private void placeTreasure(){
-		Location l = findFree();
+		Location l = findEmpty();
 		TreasureCell newTreasure = new TreasureCell(l, this);
 		treasure = newTreasure;
 		boardObject[l.getX()][l.getY()] = treasure;

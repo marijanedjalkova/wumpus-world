@@ -11,9 +11,9 @@ public class Game {
 	
 	public Game(int complexity){
 		int size = 10;
-		player = new Adventurer();
-		wumpus = new Wumpus();
-		superBat = new SuperBat();
+		player = new Adventurer(-1, -1);
+		wumpus = new Wumpus(-1, -1);
+		superBat = new SuperBat(-1, -1);
 		gBoard = new Board(size, this, complexity);
 		finished = false;
 		stepCount = 0;
