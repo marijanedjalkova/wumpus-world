@@ -19,27 +19,46 @@ public abstract class Cell {
 	}
 	
 	public void print(){
-		System.out.print("<");
+		System.out.print("I");
 		if (this instanceof TreasureCell)
 			System.out.print("T");
+		else
+			System.out.print(" ");
 		if (this instanceof ExitCell)
 			System.out.print("E");
+		else
+			System.out.print(" ");
 		if (this instanceof PitCell)
 			System.out.print("P");
+		else
+			System.out.print(" ");
 
 		if (board.game.player.getLocation().equalsTo(location))
 			System.out.print("A");
+		else
+			System.out.print(" ");
 		if (board.game.wumpus.getLocation().equalsTo(location))
 			System.out.print("W");
+		else
+			System.out.print(" ");
 		if (board.game.superBat.getLocation().equalsTo(location))
 			System.out.print("B");
+		else
+			System.out.print(" ");
+		
 		if (smells())
-			System.out.print("sm");
+			System.out.print("@");
+		else
+			System.out.print(" ");
 		if (breezes())
-			System.out.print("br");
+			System.out.print("~");
+		else
+			System.out.print(" ");
 		if (glitters())
-			System.out.print("gl");
-		System.out.print(">");
+			System.out.print("*");
+		else
+			System.out.print(" ");
+		System.out.print("I");
 	}
 	
 	public boolean smells(){

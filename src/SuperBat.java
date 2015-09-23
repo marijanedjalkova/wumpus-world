@@ -14,14 +14,13 @@ public class SuperBat extends MovingObject {
 	
 	public void move(Adventurer player, Board b){
 		Random rn = new Random();
+		int size = b.getSize();
 		int x, y;
-		Location l;
 		do{
-		x = rn.nextInt(b.getSize());
-		y = rn.nextInt(b.getSize());
-		l = new Location(x, y);
-		} while (!(b.getCell(l) instanceof EmptyCell));
-		player.setLocation(l);
+		x = rn.nextInt(size);
+		y = rn.nextInt(size);
+		} while (!(b.getCell(x, y) instanceof EmptyCell));
+		player.setLocation(new Location(x, y));
 	}
 
 }

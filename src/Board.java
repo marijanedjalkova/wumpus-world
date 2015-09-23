@@ -85,6 +85,9 @@ public class Board {
 				boardObject[j][i].print();
 			}
 			System.out.println();
+			for (int k = 0; k < 110; k++)
+				System.out.print("-");
+			System.out.println();
 		}
 	}
 	
@@ -113,6 +116,10 @@ public class Board {
 	
 	public Cell getCell(Location l){
 		return boardObject[l.getX()][l.getY()];
+	}
+	
+	public Cell getCell(int x, int y){
+		return boardObject[x][y];
 	}
 
 	public Location getSouth(Location l){
