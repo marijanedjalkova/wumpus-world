@@ -30,27 +30,15 @@ public class Board {
 		placePits(size * complexity / 5);
 
 		//place characters
-		placeAdventurer();
-		placeWumpus();
-		placeBat();
-		
-
+		placeMoving(game.player);
+		placeMoving(game.wumpus);
+		placeMoving(game.superBat);
+	
 	}
 	
-	private void placeAdventurer(){
+	private void placeMoving(MovingObject character){
 		Location l = findEmptyFree();
-		game.player.setLocation(l);
-	}
-	
-	private void placeWumpus(){
-		Location l = findEmptyFree();
-		game.wumpus.setLocation(l);
-	}
-	
-	
-	private void placeBat(){
-		Location l = findEmptyFree();
-		game.superBat.setLocation(l);
+		character.setLocation(l);
 	}
 	
 	//not only an empty cell, but also with no other characters on it
