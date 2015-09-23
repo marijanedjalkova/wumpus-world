@@ -37,18 +37,12 @@ public class Board {
 	}
 	
 	private void placeMoving(MovingObject character){
-		Location l = findEmptyFree();
-		character.setLocation(l);
-	}
-	
-	//not only an empty cell, but also with no other characters on it
-	private Location findEmptyFree(){
 		Location l;
 		do {
 			l = findEmpty();
 		} while (game.player.getLocation().equalsTo(l) || game.wumpus.getLocation().equalsTo(l)
 				|| game.superBat.getLocation().equalsTo(l));
-		return l;
+		character.setLocation(l);
 	}
 	
 	private Location findEmpty(){
