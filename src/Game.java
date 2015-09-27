@@ -1,3 +1,6 @@
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -7,6 +10,8 @@ public class Game {
 	public Adventurer player;
 	public Wumpus wumpus;
 	public SuperBat superBat;
+	private List<Character> dictionary;
+	
 	
 	
 	public Game(int complexity){
@@ -17,6 +22,7 @@ public class Game {
 		gBoard = new Board(size, this, complexity);
 		finished = false;
 		stepCount = 0;
+		dictionary = Arrays.asList('n', 's', 'w', 'e');
 	}
 
 	
@@ -25,18 +31,11 @@ public class Game {
 	}
 	
 	public boolean process(char move){
-		switch(move){
-		case 'n':
-		case 'e':
-		case 's':
-		case 'w':
+		if (dictionary.contains(move)){
 			gBoard.move(player, move);
-			break;
-		default:
-			System.out.println("Not valid, try again");
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	private void lost(){
@@ -96,8 +95,10 @@ public class Game {
 			gBoard.print();
 			System.out.println("Your step:");
 			move = user_input.next().charAt(0);
-			if (!process(move))
+			if (!process(move)){
+				System.out.println("Not valid, try again:");
 				continue;
+			}
 			stepCount++;
 			checkNewState();
 		}
