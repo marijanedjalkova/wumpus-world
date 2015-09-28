@@ -1,13 +1,15 @@
 
 public abstract class MovingObject {
-    private Location location;
+    protected Location location;
+    protected Game game;
     
-    public MovingObject(int x, int y){
+    public MovingObject(int x, int y, Game g){
     	location = new Location(x, y);
+    	game = g;
     }
     
-    public MovingObject(){
-    	this(0, 0);
+    public MovingObject(Game g){
+    	this(0, 0, g);
     }
     
     public void setLocation(Location l){

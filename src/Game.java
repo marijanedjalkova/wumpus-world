@@ -16,13 +16,17 @@ public class Game {
 	
 	public Game(int complexity){
 		int size = 10;
-		player = new Adventurer(-1, -1);
-		wumpus = new Wumpus(-1, -1);
-		superBat = new SuperBat(-1, -1);
+		player = new Adventurer(-1, -1, this);
+		wumpus = new Wumpus(-1, -1, this);
+		superBat = new SuperBat(-1, -1, this);
 		gBoard = new Board(size, this, complexity);
 		finished = false;
 		stepCount = 0;
-		dictionary = Arrays.asList('n', 's', 'w', 'e');
+		dictionary = Arrays.asList('n', 's', 'w', 'e', 'u', 'd', 'l', 'r');
+	}
+	
+	public Board getBoard(){
+		return gBoard;
 	}
 
 	
@@ -56,7 +60,7 @@ public class Game {
 	
 	public void checkNewState(){
 		Location newLocation = player.getLocation();
-		if (newLocation.equalsTo(wumpus.getLocation())){
+		if (wumpus.isAlive() && newLocation.equalsTo(wumpus.getLocation())){
 			lost();
 			return;
 		}

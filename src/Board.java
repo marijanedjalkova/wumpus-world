@@ -159,6 +159,26 @@ public class Board {
 			if (object instanceof SuperBat)
 				game.superBat.setLocation(getEast(curLoc));
 			break;
+		case 'u':
+			if (object instanceof Adventurer){
+				game.player.shoot(getNorth(game.player.getLocation()));
+			}
+			break;
+		case 'd':
+			if (object instanceof Adventurer){
+				game.player.shoot(getSouth(game.player.getLocation()));
+			}
+			break;
+		case 'l':
+			if (object instanceof Adventurer){
+				game.player.shoot(getWest(game.player.getLocation()));
+			}
+			break;
+		case 'r':
+			if (object instanceof Adventurer){
+				game.player.shoot(getEast(game.player.getLocation()));
+			}
+			break;
 		}
 	}
 	

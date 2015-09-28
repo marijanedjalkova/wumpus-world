@@ -3,13 +3,13 @@ import java.util.Random;
 
 public class SuperBat extends MovingObject {
 
-	public SuperBat(int x, int y) {
-		super(x, y);
+	public SuperBat(int x, int y, Game g) {
+		super(x, y, g);
 		
 	}
 	
-	public SuperBat(){
-		super();
+	public SuperBat(Game g){
+		super(g);
 	}
 	
 	public void move(Adventurer player, Board b){

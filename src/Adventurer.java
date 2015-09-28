@@ -2,15 +2,16 @@
 public class Adventurer extends MovingObject{
 	private boolean collected;
     
-    public Adventurer(int x, int y){
-    	super(x, y);
+    public Adventurer(int x, int y, Game g){
+    	super(x, y, g);
     	collected = false;
-    	
+    	game = g;
     }
     
-    public Adventurer(){
-    	super();
+    public Adventurer(Game g){
+    	super(g);
     	collected = false;
+    	game = g;
     }
     
     public void collectTreasure(){
@@ -22,13 +23,11 @@ public class Adventurer extends MovingObject{
     }
     
     
-    public void shoot(char d){
-    	switch (d){
-    	//TODO
-    	case 'n': ; break;
-    	case 's': ; break;
-    	case 'w': ; break;
-    	case 'e': ; break;
+    public void shoot(Location l){
+    	if (game.wumpus.getLocation().equalsTo(l)){
+    		game.wumpus.die();
+    	} else {
+    		game.wumpus.moveRandomly();
     	}
     }
 	
