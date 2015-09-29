@@ -92,13 +92,13 @@ public class Game {
 	
 	
 	public void start(){
-		Scanner user_input = new Scanner( System.in );
+		AIPlayer player = new AIPlayer();
 		char move;		
 		while (!finished){
 			//take a step
 			gBoard.print();
 			System.out.println("Your step:");
-			move = user_input.next().charAt(0);
+			move = player.makeMove();
 			if (!process(move)){
 				System.out.println("Not valid, try again:");
 				continue;
@@ -106,7 +106,6 @@ public class Game {
 			stepCount++;
 			checkNewState();
 		}
-		user_input.close();
 	}
 	
 }

@@ -31,7 +31,7 @@ public class Wumpus extends MovingObject{
 		int dir = rn.nextInt(3);//3 for number of directions 4
 		Location l;
 		switch (dir){
-		case 0:
+		 case 0:
 			l = game.getBoard().getNorth(location);
 			break;
 		case 1:
