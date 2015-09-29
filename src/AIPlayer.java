@@ -3,8 +3,10 @@ import java.util.Scanner;
 
 public class AIPlayer {
 	Scanner user_input;
+	Game game;
 	
-	public AIPlayer(){
+	public AIPlayer(Game g){
+		game = g;
 		user_input = new Scanner( System.in );
 	}
 

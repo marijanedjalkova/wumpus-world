@@ -33,7 +33,7 @@ public abstract class Cell {
 		else
 			System.out.print(" ");
 
-		if (board.game.player.getLocation().equalsTo(location))
+		if (board.game.character.getLocation().equalsTo(location))
 			System.out.print("A");
 		else
 			System.out.print(" ");

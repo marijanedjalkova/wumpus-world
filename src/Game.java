@@ -1,22 +1,23 @@
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
 	private boolean finished;
 	private Board gBoard;
 	private int stepCount;
-	public Adventurer player;
+	public Adventurer character;
 	public Wumpus wumpus;
 	public SuperBat superBat;
 	private List<Character> dictionary;
+	private AIPlayer player;
 	
 	
 	
 	public Game(int complexity){
 		int size = 10;
-		player = new Adventurer(-1, -1, this);
+		player = new AIPlayer(this);
+		character = new Adventurer(-1, -1, this);
 		wumpus = new Wumpus(-1, -1, this);
 		superBat = new SuperBat(-1, -1, this);
 		gBoard = new Board(size, this, complexity);
@@ -36,7 +37,7 @@ public class Game {
 	
 	public boolean process(char move){
 		if (dictionary.contains(move)){
-			gBoard.move(player, move);
+			gBoard.move(character, move);
 			return true;
 		}
 		return false;
@@ -48,8 +49,8 @@ public class Game {
 	}
 	
 	private boolean won(){
-		if (gBoard.getCell(player.getLocation()) instanceof ExitCell){
-			if (player.collectedTreasure()){
+		if (gBoard.getCell(character.getLocation()) instanceof ExitCell){
+			if (character.collectedTreasure()){
 				System.out.println("Congratulations, you won!");
 				finished = true;
 				return true;
@@ -59,7 +60,7 @@ public class Game {
 	}
 	
 	public void checkNewState(){
-		Location newLocation = player.getLocation();
+		Location newLocation = character.getLocation();
 		if (wumpus.isAlive() && newLocation.equalsTo(wumpus.getLocation())){
 			lost();
 			return;
@@ -70,10 +71,10 @@ public class Game {
 		}
 		
 		if (newLocation.equalsTo(superBat.getLocation())){
-			superBat.move(player, gBoard);
+			superBat.move(character, gBoard);
 		}
 		if (gBoard.getCell(newLocation) instanceof TreasureCell){
-			player.collectTreasure();
+			character.collectTreasure();
 			return;
 		}
 		if (won()){
@@ -92,7 +93,6 @@ public class Game {
 	
 	
 	public void start(){
-		AIPlayer player = new AIPlayer();
 		char move;		
 		while (!finished){
 			//take a step

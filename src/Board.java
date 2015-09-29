@@ -30,7 +30,7 @@ public class Board {
 		placePits(size * complexity / 5);
 
 		//place characters
-		placeMoving(game.player);
+		placeMoving(game.character);
 		placeMoving(game.wumpus);
 		placeMoving(game.superBat);
 	
@@ -40,7 +40,7 @@ public class Board {
 		Location l;
 		do {
 			l = findEmpty();
-		} while (game.player.getLocation().equalsTo(l) || game.wumpus.getLocation().equalsTo(l)
+		} while (game.character.getLocation().equalsTo(l) || game.wumpus.getLocation().equalsTo(l)
 				|| game.superBat.getLocation().equalsTo(l));
 		character.setLocation(l);
 	}
@@ -129,7 +129,7 @@ public class Board {
 		switch (d) {
 		case 'n':
 			if (object instanceof Adventurer)
-				game.player.setLocation(getNorth(curLoc));
+				game.character.setLocation(getNorth(curLoc));
 			if (object instanceof Wumpus)
 				game.wumpus.setLocation(getNorth(curLoc));
 			if (object instanceof SuperBat)
@@ -137,7 +137,7 @@ public class Board {
 			break;
 		case 's':
 			if (object instanceof Adventurer)
-				game.player.setLocation(getSouth(curLoc));
+				game.character.setLocation(getSouth(curLoc));
 			if (object instanceof Wumpus)
 				game.wumpus.setLocation(getSouth(curLoc));
 			if (object instanceof SuperBat)
@@ -145,7 +145,7 @@ public class Board {
 			break;
 		case 'w':
 			if (object instanceof Adventurer)
-				game.player.setLocation(getWest(curLoc));
+				game.character.setLocation(getWest(curLoc));
 			if (object instanceof Wumpus)
 				game.wumpus.setLocation(getWest(curLoc));
 			if (object instanceof SuperBat)
@@ -153,7 +153,7 @@ public class Board {
 			break;
 		case 'e':
 			if (object instanceof Adventurer)
-				game.player.setLocation(getEast(curLoc));
+				game.character.setLocation(getEast(curLoc));
 			if (object instanceof Wumpus)
 				game.wumpus.setLocation(getEast(curLoc));
 			if (object instanceof SuperBat)
@@ -161,22 +161,22 @@ public class Board {
 			break;
 		case 'u':
 			if (object instanceof Adventurer){
-				game.player.shoot(getNorth(game.player.getLocation()));
+				game.character.shoot(getNorth(game.character.getLocation()));
 			}
 			break;
 		case 'd':
 			if (object instanceof Adventurer){
-				game.player.shoot(getSouth(game.player.getLocation()));
+				game.character.shoot(getSouth(game.character.getLocation()));
 			}
 			break;
 		case 'l':
 			if (object instanceof Adventurer){
-				game.player.shoot(getWest(game.player.getLocation()));
+				game.character.shoot(getWest(game.character.getLocation()));
 			}
 			break;
 		case 'r':
 			if (object instanceof Adventurer){
-				game.player.shoot(getEast(game.player.getLocation()));
+				game.character.shoot(getEast(game.character.getLocation()));
 			}
 			break;
 		}
