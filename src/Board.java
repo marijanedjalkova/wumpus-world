@@ -28,12 +28,52 @@ public class Board {
 		placeExit();
 		placeTreasure();
 		placePits(size * complexity / 5);
+		
+		checkPits();
 
 		//place characters
 		placeMoving(game.character);
 		placeMoving(game.wumpus);
 		placeMoving(game.superBat);
 	
+	}
+	
+	private void checkPits(){
+		Random rn = new Random();
+		for (int i = 0; i < size; i++){
+			for (int j = 0; j < size; j++){
+				Cell curCell = boardObject[i][j];
+				//check 4 surrounding squares
+				Cell northCell = getCell(getNorth(curCell.location));
+				Cell southCell = getCell(getSouth(curCell.location));
+				Cell eastCell = getCell(getEast(curCell.location));
+				Cell westCell = getCell(getWest(curCell.location));
+				//if all four of them are taken, replace a random one by an empty square
+				if (northCell instanceof PitCell && southCell instanceof PitCell &&
+						eastCell instanceof PitCell && westCell instanceof PitCell){
+					int direction = rn.nextInt(3);
+					Location l;
+					switch (direction){
+					case 0:
+						l = getNorth(curCell.location);
+						break;
+					case 1:
+						l = getSouth(curCell.location);
+						break;
+					case 2:
+						l = getEast(curCell.location);
+						break;
+					case 3:
+						l = getWest(curCell.location);
+						break;
+					default:
+						l = getNorth(curCell.location);
+						break;
+					}
+					boardObject[l.getX()][l.getY()] = new EmptyCell(l, this);
+				}
+			}
+		}
 	}
 	
 	private void placeMoving(MovingObject character){
