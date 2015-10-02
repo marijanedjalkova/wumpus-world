@@ -56,33 +56,60 @@ public class AIPlayer {
 		
 		if (curCell instanceof ExitCell){
 			exitLoc = l; //remember for future
+			ai_board.getBoardObject()[l.getX()][l.getY()] = new ExitCell(l, ai_board);
 		}
 		
 		if (curCell instanceof TreasureCell && knowExit()){
 			//go back
-			//TODO think of a better way to make path
+			//TODO think of a better way
 			pathBackToExit();
+			ai_board.getBoardObject()[l.getX()][l.getY()] = new TreasureCell(l, ai_board);
 			return firstOfPlanned(l);
-			
 		}
 		
+		//clearly this is an empty cell since we haven't died yet
+		ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
 		
+		ArrayList<Cell> known_around = lookAround(l, true);
+		ArrayList<Cell> unknown_around = lookAround(l, false);
+				
 		
 		if (!curCell.breezes() && !curCell.smells() && !curCell.glitters()){
-			ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
+			
 		}
 		
 		if (curCell.breezes()){
 			
 		}
+		
 		if (curCell.glitters()){
-			
+			//glitter is in one of the surrounding squares
 		}
+		
 		if (curCell.smells()){
 			
 		}
 
 		return firstOfPlanned(l);
+	}
+	
+	private ArrayList<Cell> lookAround(Location l, boolean known){
+		ArrayList<Cell> result = new ArrayList<Cell>();
+			Cell north = ai_board.getCell(ai_board.getNorth(l));
+			if ((north instanceof UnknownCell) != known)
+				result.add(north);
+			Cell south = ai_board.getCell(ai_board.getSouth(l));
+			if ((south instanceof UnknownCell) != known)
+				result.add(south);
+			Cell east = ai_board.getCell(ai_board.getEast(l));
+			if ((east instanceof UnknownCell) != known)
+				result.add(east);
+			Cell west = ai_board.getCell(ai_board.getWest(l));
+			if ((west instanceof UnknownCell) != known)
+				result.add(west);
+			
+		return result;
+			
 	}
 	
 	private void pathBackToExit(){
