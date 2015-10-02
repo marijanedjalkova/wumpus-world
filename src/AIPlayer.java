@@ -54,21 +54,21 @@ public class AIPlayer {
 			ai_board.getBoardObject()[l.getX()][l.getY()] = new ExitCell(l, ai_board);
 		}
 		
-		if (plan.size()>0){
-			//might want to still process every cell, TODO think!
-			return firstOfPlanned(l);
-		}
-		
 		if (curCell instanceof TreasureCell && knowExit()){
 			//go back
 			//TODO think of a better way
 			pathBackToExit();
 			ai_board.getBoardObject()[l.getX()][l.getY()] = new TreasureCell(l, ai_board);
-			return firstOfPlanned(l);
 		}
 		
 		//clearly this is an empty cell since we haven't died yet
 		ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
+		
+		if (plan.size()>0){
+			//might want to still process every cell, TODO think!
+			return firstOfPlanned(l);
+		}
+		
 		
 		ArrayList<Cell> known_around = lookAround(l, true);
 		ArrayList<Cell> unknown_around = lookAround(l, false);
