@@ -9,7 +9,7 @@ public class AIPlayer {
 	Location current;
 	Adventurer character;
 	Location exitLoc; //may not know
-	Board ai_board;
+	Board ai_board; // ai's version, will be filled gradually
 	
 	public AIPlayer(Game g){
 		game = g;
@@ -25,7 +25,7 @@ public class AIPlayer {
 		Cell[][] array = new Cell[ai_board.getSize()][ai_board.getSize()];
 		for (int i = 0; i < ai_board.getSize(); i++){
 			for (int j = 0; j < ai_board.getSize(); j++){
-				array[j][i] = new EmptyCell(j, i, ai_board);
+				array[j][i] = new UnknownCell(j, i, ai_board);
 			}
 		}
 		ai_board.setBoardObject(array);
