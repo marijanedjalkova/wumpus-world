@@ -41,13 +41,23 @@ public class AIPlayer {
 	
 
 	public char makeMove(){
+		//all methods that help this one should add their moves to plan
+		//in the end the first move of the plan is returned
 		Location l = character.location;
+		Location prev = visitedLocations.get(visitedLocations.size()-1);
 		visitedLocations.add(l);
+		if (adjacent(l, prev)){
+			//we came here ourselves
+			
+		} else {
+			//bat dropped us here
+		}
 		
 		if (plan.size()>0){
-			char move = moveToChar(l, plan.get(0));
-			plan.remove(0);
-			return move;
+			// I don't like this because there might be danger
+			//might want to still process every cell
+			// TODO think!
+			return firstOfPlanned(l);
 		}
 		
 		Cell curCell = real_board.getCell(l);
@@ -60,7 +70,7 @@ public class AIPlayer {
 			
 		}
 		if (curCell.breezes()){
-			
+			processBreeze(l);
 		}
 		if (curCell.glitters()){
 			
@@ -69,10 +79,29 @@ public class AIPlayer {
 			
 		}
 		if (!curCell.breezes() && !curCell.smells() && !curCell.glitters()){
-			
+			ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
 		}
-		return 'n';
+		
+		return firstOfPlanned(l);
 	}
+	
+	public boolean adjacent(Location l1, Location l2){
+		return (Math.abs(l1.getX() - l2.getX()) + Math.abs(l1.getY() - l2.getY())) == 1;
+	}
+	
+	public void processBreeze(Location l){
+		//breezes on the current cell
+		//take all the cells around this that we visited
+		//there will be at least one, the previous one
+		//unless we were dropped by the bat
+	}
+	
+	private char firstOfPlanned(Location l){
+		char move = moveToChar(l, plan.get(0));
+		plan.remove(0);
+		return move;
+	}
+	
 	
 	private char moveToChar(Location l1, Location l2){
 		if (l1.getX() == l2.getY()){
