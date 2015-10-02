@@ -9,14 +9,13 @@ public class Board {
 	public ExitCell exit;
 	public ArrayList<PitCell> pitCells;
 
-	public Board(int size, Game g, int complexity) {
+	public Board(int size, Game g) {
 		this.size = size;
-		pitCells = new ArrayList<PitCell>();
 		game = g;
-		initialize(complexity);	
 	}
 
 	public void initialize(int complexity) {
+		pitCells = new ArrayList<PitCell>();
 		//create empty cells
 		boardObject = new Cell[size][size];
 		for (int i = 0; i < size; i++){
@@ -71,6 +70,13 @@ public class Board {
 						break;
 					}
 					boardObject[l.getX()][l.getY()] = new EmptyCell(l, this);
+					for (int k = 0; k < pitCells.size(); k++){
+						PitCell cur = pitCells.get(k);
+						if (cur.location.equalsTo(l)){
+							pitCells.remove(k);
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -129,6 +135,14 @@ public class Board {
 		TreasureCell newTreasure = new TreasureCell(l, this);
 		treasure = newTreasure;
 		boardObject[l.getX()][l.getY()] = treasure;
+	}
+	
+	public Cell[][] getBoardObject(){
+		return boardObject;
+	}
+	
+	public void setBoardObject(Cell[][] array){
+		boardObject = array;
 	}
 	
 	public Cell getCell(Location l){

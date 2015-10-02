@@ -16,14 +16,16 @@ public class Game {
 	
 	public Game(int complexity){
 		int size = 10;
-		player = new AIPlayer(this);
 		character = new Adventurer(-1, -1, this);
+		
 		wumpus = new Wumpus(-1, -1, this);
 		superBat = new SuperBat(-1, -1, this);
-		gBoard = new Board(size, this, complexity);
+		gBoard = new Board(size, this);
+		gBoard.initialize(complexity);
 		finished = false;
 		stepCount = 0;
 		dictionary = Arrays.asList('n', 's', 'w', 'e', 'u', 'd', 'l', 'r');
+		player = new AIPlayer(this);
 	}
 	
 	public Board getBoard(){
