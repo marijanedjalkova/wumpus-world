@@ -5,23 +5,26 @@ import java.util.Scanner;
 public class AIPlayer {
 	Scanner user_input;
 	Game game;
-	ArrayList<Location> visitedLocations;
+	ArrayList<Location> visitedLocations, plan;
 	Location current;
 	Adventurer character;
 	Location exitLoc; //may not know
-	Board ai_board; // ai's version, will be filled gradually
+	Board ai_board, real_board; // ai's version, will be filled gradually
+	
 	
 	public AIPlayer(Game g){
 		game = g;
 		character = g.character;
 		user_input = new Scanner( System.in );
 		visitedLocations = new ArrayList<Location>();
+		plan = new ArrayList<Location>(); //for when we have a clear path
 		exitLoc = new Location(-1, -1);
 		ai_board = new Board(game.getBoard().getSize(), game);
-		initialize_board();
+		real_board = game.getBoard();
+		initialize_ai_board();
 	}
 	
-	private void initialize_board(){
+	private void initialize_ai_board(){
 		Cell[][] array = new Cell[ai_board.getSize()][ai_board.getSize()];
 		for (int i = 0; i < ai_board.getSize(); i++){
 			for (int j = 0; j < ai_board.getSize(); j++){
@@ -40,14 +43,21 @@ public class AIPlayer {
 	public char makeMove(){
 		Location l = character.location;
 		visitedLocations.add(l);
-		Cell curCell = game.getBoard().getCell(l);
+		
+		if (plan.size()>0){
+			char move = moveToChar(l, plan.get(0));
+			plan.remove(0);
+			return move;
+		}
+		
+		Cell curCell = real_board.getCell(l);
 		if (curCell instanceof ExitCell){
 			exitLoc = l; //remember for future
-			
 		}
+		
 		if (character.collectedTreasure() && knowExit()){
 			//make a path to Exit, make the first step if possible
-			return firstStepToExit(l, exitLoc);
+			
 		}
 		if (curCell.breezes()){
 			
@@ -64,9 +74,21 @@ public class AIPlayer {
 		return 'n';
 	}
 	
-	private char firstStepToExit(Location current, Location exit){
-		return 'e';
+	private char moveToChar(Location l1, Location l2){
+		if (l1.getX() == l2.getY()){
+			if (l1.getY() - l2.getY() == 1)
+				return 'n';
+			else 
+				return 's';
+		} else {
+			if (l1.getX() - l2.getX() == 1)
+				return 'w';
+			else
+				return 'e';
+		}
 	}
+	
+	
 	
 	
 
