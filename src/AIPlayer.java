@@ -47,16 +47,16 @@ public class AIPlayer {
 		Location l = character.location;
 		visitedLocations.add(l);
 		
-		if (plan.size()>0){
-			//might want to still process every cell, TODO think!
-			return firstOfPlanned(l);
-		}
-		
 		Cell curCell = real_board.getCell(l);
 		
 		if (curCell instanceof ExitCell){
 			exitLoc = l; //remember for future
 			ai_board.getBoardObject()[l.getX()][l.getY()] = new ExitCell(l, ai_board);
+		}
+		
+		if (plan.size()>0){
+			//might want to still process every cell, TODO think!
+			return firstOfPlanned(l);
 		}
 		
 		if (curCell instanceof TreasureCell && knowExit()){
@@ -73,24 +73,52 @@ public class AIPlayer {
 		ArrayList<Cell> known_around = lookAround(l, true);
 		ArrayList<Cell> unknown_around = lookAround(l, false);
 				
+		if (curCell.glitters() && !character.collectedTreasure()){
+			//glitter is in one of the surrounding squares
+			lookupTreasureNear(l, unknown_around);
+		}
 		
-		if (!curCell.breezes() && !curCell.smells() && !curCell.glitters()){
-			
+		if (!curCell.breezes() && !curCell.smells()){
+			//choose a random one from the cells we haven't been to yet
+			//if we have been to all of them, choose the one closest to the 
+			//unknown region
+			if (unknown_around.size() > 0){
+				return moveToChar(l, chooseRandom(unknown_around).location);
+			} else {
+				//TODO find the closest unknown
+				return moveToChar(l, chooseRandom(known_around).location);
+			}
 		}
 		
 		if (curCell.breezes()){
-			
+			//pit is near!
+			//do we know where it is?
 		}
 		
-		if (curCell.glitters()){
-			//glitter is in one of the surrounding squares
-		}
+		
 		
 		if (curCell.smells()){
-			
+			//wumpus is near
+			//shoot if can locate
 		}
 
 		return firstOfPlanned(l);
+	}
+	
+	private void lookupTreasureNear(Location l, ArrayList<Cell> neighbours){
+		int count = 0;
+		boolean flag = true;
+		while (count < neighbours.size()){
+			//inspect all of the neighbour cells
+			if(flag)
+				plan.add(ai_board.getCell(ai_board.getNorth(l)).location);
+			else{
+				if (count < neighbours.size() - 1)
+					plan.add(l);
+				count++;
+			}
+			flag = !flag;
+		}
 	}
 	
 	private ArrayList<Cell> lookAround(Location l, boolean known){
@@ -135,13 +163,6 @@ public class AIPlayer {
 		return false;
 	}
 	
-	public void processBreeze(Location l){
-		//breezes on the current cell
-		//take all the cells around this that we visited
-		//there will be at least one, the previous one
-		//unless we were dropped by the bat
-	}
-	
 	private char firstOfPlanned(Location l){
 		char move = moveToChar(l, plan.get(0));
 		plan.remove(0);
@@ -165,7 +186,7 @@ public class AIPlayer {
 		}
 	}
 	
-	private Location chooseRandom(ArrayList<Location> list){
+	private Cell chooseRandom(ArrayList<Cell> list){
 		Random rn = new Random();
 		int choice = rn.nextInt(list.size());
 		return list.get(choice);
