@@ -86,7 +86,20 @@ public class AIPlayer {
 	}
 	
 	public boolean adjacent(Location l1, Location l2){
-		return (Math.abs(l1.getX() - l2.getX()) + Math.abs(l1.getY() - l2.getY())) == 1;
+		if ((Math.abs((l1.getX() - l2.getX()) + (l1.getY() - l2.getY()))) == 1){
+			return true;
+		}
+		int dist = 0;
+		if (l1.getX() == l2.getX()){
+			dist = Math.abs(l1.getY() - l2.getY());
+			
+		}
+		else if (l1.getY() == l2.getY()){
+			dist = Math.abs(l1.getY() - l2.getY());
+		}
+		if (dist == 1 || dist == ai_board.getSize())
+			return true;
+		else return false;
 	}
 	
 	public void processBreeze(Location l){
