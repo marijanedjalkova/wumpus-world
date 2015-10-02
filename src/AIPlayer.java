@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -44,33 +45,35 @@ public class AIPlayer {
 		//all methods that help this one should add their moves to plan
 		//in the end the first move of the plan is returned
 		Location l = character.location;
-		Location prev = visitedLocations.get(visitedLocations.size()-1);
 		visitedLocations.add(l);
-		if (adjacent(l, prev)){
-			//we came here ourselves
-			
-		} else {
-			//bat dropped us here
-		}
 		
 		if (plan.size()>0){
-			// I don't like this because there might be danger
-			//might want to still process every cell
-			// TODO think!
+			//might want to still process every cell, TODO think!
 			return firstOfPlanned(l);
 		}
 		
 		Cell curCell = real_board.getCell(l);
+		
 		if (curCell instanceof ExitCell){
 			exitLoc = l; //remember for future
 		}
 		
-		if (character.collectedTreasure() && knowExit()){
-			//make a path to Exit, make the first step if possible
+		if (curCell instanceof TreasureCell && knowExit()){
+			//go back
+			//TODO think of a better way to make path
+			pathBackToExit();
+			return firstOfPlanned(l);
 			
 		}
+		
+		
+		
+		if (!curCell.breezes() && !curCell.smells() && !curCell.glitters()){
+			ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
+		}
+		
 		if (curCell.breezes()){
-			processBreeze(l);
+			
 		}
 		if (curCell.glitters()){
 			
@@ -78,28 +81,31 @@ public class AIPlayer {
 		if (curCell.smells()){
 			
 		}
-		if (!curCell.breezes() && !curCell.smells() && !curCell.glitters()){
-			ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
-		}
-		
+
 		return firstOfPlanned(l);
 	}
 	
-	public boolean adjacent(Location l1, Location l2){
-		if ((Math.abs((l1.getX() - l2.getX()) + (l1.getY() - l2.getY()))) == 1){
-			return true;
+	private void pathBackToExit(){
+		int count = visitedLocations.size() - 2;
+		while (count > 0){
+			plan.add(visitedLocations.get(count));
+			if (ai_board.getCell(visitedLocations.get(count)) instanceof ExitCell)
+				count = 0;
+			count--;
 		}
-		int dist = 0;
+	}
+	
+	public boolean adjacent(Location l1, Location l2){
+		int one_dir_dist = 0;
 		if (l1.getX() == l2.getX()){
-			dist = Math.abs(l1.getY() - l2.getY());
-			
+			one_dir_dist = Math.abs(l1.getY() - l2.getY());
 		}
 		else if (l1.getY() == l2.getY()){
-			dist = Math.abs(l1.getY() - l2.getY());
+			one_dir_dist = Math.abs(l1.getY() - l2.getY());
 		}
-		if (dist == 1 || dist == ai_board.getSize())
+		if (one_dir_dist == 1 || one_dir_dist == ai_board.getSize())
 			return true;
-		else return false;
+		return false;
 	}
 	
 	public void processBreeze(Location l){
@@ -115,6 +121,28 @@ public class AIPlayer {
 		return move;
 	}
 	
+	private char randomMove(){
+		Random rn = new Random();
+		int choice = rn.nextInt(3);
+		switch (choice){
+		case 0:
+			return 'n';
+		case 1:
+			return 's';
+		case 2: 
+			return 'w';
+		case 3:
+			return 'e';
+		default:
+			return 'e';
+		}
+	}
+	
+	private Location chooseRandom(ArrayList<Location> list){
+		Random rn = new Random();
+		int choice = rn.nextInt(list.size());
+		return list.get(choice);
+	}
 	
 	private char moveToChar(Location l1, Location l2){
 		if (l1.getX() == l2.getY()){
