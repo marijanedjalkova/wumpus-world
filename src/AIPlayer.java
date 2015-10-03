@@ -4,13 +4,14 @@ import java.util.Scanner;
 
 
 public class AIPlayer {
-	Scanner user_input;
-	Game game;
-	ArrayList<Location> visitedLocations, plan;
-	Location current;
-	Adventurer character;
-	Location exitLoc; //may not know
-	Board ai_board, real_board; // ai's version, will be filled gradually
+	private Scanner user_input;
+	private Game game;
+	private ArrayList<Location> visitedLocations, plan;
+	private Location current;
+	private Adventurer character;
+	private Location exitLoc; //may not know
+	private Board ai_board, real_board; // ai's version, will be filled gradually
+	private ArrayList<Cell> known_around, unknown_around;
 	
 	
 	public AIPlayer(Game g){
@@ -44,38 +45,39 @@ public class AIPlayer {
 	public char makeMove(){
 		//all methods that help this one should add their moves to plan
 		//in the end the first move of the plan is returned
-		Location l = character.location;
-		visitedLocations.add(l);
+		current = character.location;
+		visitedLocations.add(current);
 		
-		Cell curCell = real_board.getCell(l);
+		Cell curCell = real_board.getCell(current);
 		
 		if (curCell instanceof ExitCell){
-			exitLoc = l; //remember for future
-			ai_board.getBoardObject()[l.getX()][l.getY()] = new ExitCell(l, ai_board);
+			exitLoc = current; //remember for future
+			ai_board.getBoardObject()[current.getX()][current.getY()] = new ExitCell(current, ai_board);
 		}
 		
 		if (curCell instanceof TreasureCell && knowExit()){
 			//go back
 			//TODO think of a better way
 			pathBackToExit();
-			ai_board.getBoardObject()[l.getX()][l.getY()] = new TreasureCell(l, ai_board);
+			ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
 		}
 		
 		//clearly this is an empty cell since we haven't died yet
-		ai_board.getBoardObject()[l.getX()][l.getY()] = new EmptyCell(l, ai_board);
+		ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
 		
 		if (plan.size()>0){
 			//might want to still process every cell, TODO think!
-			return firstOfPlanned(l);
+			return firstOfPlanned(current);
 		}
 		
 		
-		ArrayList<Cell> known_around = lookAround(l, true);
-		ArrayList<Cell> unknown_around = lookAround(l, false);
+		known_around = lookAround(current, true);
+		unknown_around = lookAround(current, false);
 				
 		if (curCell.glitters() && !character.collectedTreasure()){
 			//glitter is in one of the surrounding squares
-			lookupTreasureNear(l, unknown_around);
+			System.out.println("Gold is near!");
+			lookupTreasureNear(current, unknown_around);
 		}
 		
 		if (!curCell.breezes() && !curCell.smells()){
@@ -83,26 +85,36 @@ public class AIPlayer {
 			//if we have been to all of them, choose the one closest to the 
 			//unknown region
 			if (unknown_around.size() > 0){
-				return moveToChar(l, chooseRandom(unknown_around).location);
+				return moveToChar(current, chooseRandom(unknown_around).location);
 			} else {
 				//TODO find the closest unknown
-				return moveToChar(l, chooseRandom(known_around).location);
+				return moveToChar(current, chooseRandom(known_around).location);
 			}
 		}
 		
 		if (curCell.breezes()){
-			//pit is near!
-			//do we know where it is?
+			locatePit();
 		}
 		
 		
 		
 		if (curCell.smells()){
 			//wumpus is near
-			//shoot if can locate
+			//shoot if can locate? Leave for later
 		}
-
-		return firstOfPlanned(l);
+		if (plan.size() > 0)
+			return firstOfPlanned(current);
+		if (unknown_around.size() > 0)
+			return moveToChar(current, chooseRandom(unknown_around).location);
+		else
+			return moveToChar(current, chooseRandom(known_around).location);
+	}
+	
+	private void locatePit(){
+		if (unknown_around.size()==1){
+			Location pitLoc = unknown_around.get(0).location;
+			ai_board.getBoardObject()[pitLoc.getX()][pitLoc.getY()] = new PitCell(pitLoc, ai_board);
+		}
 	}
 	
 	private void lookupTreasureNear(Location l, ArrayList<Cell> neighbours){
