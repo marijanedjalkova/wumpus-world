@@ -71,9 +71,9 @@ public class AIPlayer {
 		known_around = lookAround(current, true);
 		unknown_around = lookAround(current, false);
 
+
 		if (curCell.glitters() && !character.collectedTreasure()) {
 			// glitter is in one of the surrounding squares
-			System.out.println("Gold is near!");
 			lookupTreasureNear(current, unknown_around);
 		}
 
@@ -100,8 +100,10 @@ public class AIPlayer {
 		}
 		if (plan.size() > 0)
 			return firstOfPlanned(current);
-		if (unknown_around.size() > 0)
+		if (unknown_around.size() > 0){
+			System.out.println("returning here");
 			return moveToChar(current, chooseRandom(unknown_around).location);
+		}
 		else
 			return moveToChar(current, chooseRandom(known_around).location);
 	}
