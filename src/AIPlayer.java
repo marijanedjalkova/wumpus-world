@@ -115,6 +115,7 @@ public class AIPlayer {
 			Location pitLoc = unknown_around.get(0).location;
 			ai_board.getBoardObject()[pitLoc.getX()][pitLoc.getY()] = new PitCell(pitLoc, ai_board);
 			pitCells.add(pitLoc);
+			visitedLocations.add(pitLoc);
 			unknown_around.remove(0);
 		}
 	}
