@@ -55,16 +55,18 @@ public class AIPlayer {
 
 		if (curCell instanceof TreasureCell) {
 			ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
+			plan = new ArrayList<Location>();
 			if (knowExit()){
 			// go back
 			// TODO think of a better way
-			pathBackToExit();
+				pathBackToExit();
 			}
 			
 		}
-
+		if (!(curCell instanceof TreasureCell || curCell instanceof ExitCell)){
 		// clearly this is an empty cell since we haven't died yet
-		ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
+			ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
+		}
 
 		if (plan.size() > 0) {
 			System.out.println("Following the plan");
