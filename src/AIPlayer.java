@@ -3,8 +3,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class AIPlayer {
-	private ArrayList<Location> visitedLocations, plan, pitCells;
-	private Location current;
+	public ArrayList<Location> visitedLocations;
+	private ArrayList<Location> plan, pitCells;
+	public Location current;
 
 	private Location exitLoc; // may not know
 	private Board ai_board; // ai's version, will be filled
@@ -12,12 +13,13 @@ public class AIPlayer {
 	private ArrayList<Cell> known_around, unknown_around;
 	private boolean collectedTreasure;
 
-	public AIPlayer(Board b) {
+	public AIPlayer(Board b, Location cur) {
 		visitedLocations = new ArrayList<Location>();
 		pitCells = new ArrayList<Location>();
 		plan = new ArrayList<Location>(); // for when we have a clear path
 		exitLoc = new Location(-1, -1);
 		ai_board = b;
+		current = cur;
 		initialize_ai_board();
 	}
 
@@ -137,6 +139,14 @@ public class AIPlayer {
 			
 		}
 		
+	}
+	
+	public boolean visited(Location l){
+		for (int i = 0; i < visitedLocations.size(); i++){
+			if (visitedLocations.get(i).equalsTo(l))
+				return true;
+		}
+		return false;
 	}
 
 	private void lookupTreasureNear(Location l, ArrayList<Cell> neighbours) {

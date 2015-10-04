@@ -18,21 +18,24 @@ public abstract class Cell {
 		return location;
 	}
 	
-	public void print(){
+	public void print(AIPlayer player, boolean debug){
 		System.out.print("|");
-		
 		
 		if (this instanceof PitCell)
 			System.out.print("P");
-
 		else if (board.game.character.getLocation().equalsTo(location))
 			System.out.print("A");
 		
-		else if (board.game.wumpus.getLocation().equalsTo(location))
-			System.out.print("W");
-		
-		else if (board.game.superBat.getLocation().equalsTo(location))
-			System.out.print("B");
+		else if (board.game.wumpus.getLocation().equalsTo(location)){
+			if (player.current.equalsTo(location) || debug)
+				System.out.print("W");
+			else System.out.print(" ");
+		}
+		else if (board.game.superBat.getLocation().equalsTo(location)){
+			if (player.visited(location) || debug)
+				System.out.print("B");
+			else System.out.print(" ");
+		}
 		else 
 			System.out.print(" ");
 		
@@ -44,8 +47,11 @@ public abstract class Cell {
 			System.out.print("E");
 		else
 			System.out.print(" ");
-		if (smells())
-			System.out.print("@");
+		if (smells()){
+			if (player.visited(location) || debug)
+				System.out.print("@");
+			else System.out.print(" ");
+		}
 		else
 			System.out.print(" ");
 		if (breezes())

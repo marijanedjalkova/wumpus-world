@@ -102,13 +102,13 @@ public class Board {
 		return new Location(x, y);
 	}
 	
-	public void print(){
+	public void print(AIPlayer player, boolean true_game){
 		for (int k = 0; k < 7* size; k++)
 			System.out.print("-");
 		System.out.println();
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++){
-				boardObject[j][i].print();
+				boardObject[j][i].print(player, true_game);
 			}
 			System.out.println("|");
 			for (int k = 0; k < 7*size; k++)

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Game {
 	private boolean finished;
-	private Board gBoard;
+	private Board gBoard, ai_board;
 	private int stepCount;
 	public Adventurer character;
 	public Wumpus wumpus;
@@ -25,8 +25,8 @@ public class Game {
 		finished = false;
 		stepCount = 0;
 		dictionary = Arrays.asList('n', 's', 'w', 'e', 'u', 'd', 'l', 'r');
-		Board ai_board = new Board(size, this);
-		player = new AIPlayer(ai_board);
+		ai_board = new Board(size, this);
+		player = new AIPlayer(ai_board, character.location);
 	}
 	
 	public Board getBoard(){
@@ -89,12 +89,13 @@ public class Game {
 	
 	
 	public void start(){
+		gBoard.print(player, true);
 		char move;	
 		Cell currentCell = gBoard.getCell(character.location);
-		System.out.println("Game started:");
+		System.out.println("Game started: move using NSWE and shoot using UDLR");
 		while (!finished){
 			//take a step
-			gBoard.print();
+			ai_board.print(player, false);
 			System.out.println("Your step:");
 			currentCell = gBoard.getCell(character.location);
 			move = player.makeMove(currentCell);

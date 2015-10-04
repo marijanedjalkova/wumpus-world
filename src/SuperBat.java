@@ -13,6 +13,7 @@ public class SuperBat extends MovingObject {
 	}
 	
 	public void move(Adventurer player, Board b){
+		System.out.println("You were picked up by a superbat and moved to a random location!");
 		Random rn = new Random();
 		int size = b.getSize();
 		int x, y;
