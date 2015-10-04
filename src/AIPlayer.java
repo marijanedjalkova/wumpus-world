@@ -3,20 +3,18 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class AIPlayer {
-	private Scanner user_input;
 	private Game game;
 	private ArrayList<Location> visitedLocations, plan, pitCells;
 	private Location current;
-	private Adventurer character;
+
 	private Location exitLoc; // may not know
 	private Board ai_board, real_board; // ai's version, will be filled
 										// gradually
 	private ArrayList<Cell> known_around, unknown_around;
+	private boolean collectedTreasure;
 
 	public AIPlayer(Game g) {
 		game = g;
-		character = g.character;
-		user_input = new Scanner(System.in);
 		visitedLocations = new ArrayList<Location>();
 		pitCells = new ArrayList<Location>();
 		plan = new ArrayList<Location>(); // for when we have a clear path
@@ -40,10 +38,10 @@ public class AIPlayer {
 		return (exitLoc.getX() != -1 && exitLoc.getY() != -1);
 	}
 
-	public char makeMove() {
+	public char makeMove(Cell currentCell) {
 		// all methods that help this one should add their moves to plan
 		// in the end the first move of the plan is returned
-		current = character.location;
+		current = currentCell.location;
 		visitedLocations.add(current);
 
 		Cell curCell = real_board.getCell(current);
@@ -55,6 +53,7 @@ public class AIPlayer {
 
 		if (curCell instanceof TreasureCell) {
 			if (firstVisit()){
+				collectedTreasure = true;
 				ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
 				plan = new ArrayList<Location>();
 			}
@@ -80,7 +79,7 @@ public class AIPlayer {
 		unknown_around = lookAround(current, false);
 
 
-		if (curCell.glitters() && !character.collectedTreasure()) {
+		if (curCell.glitters() && !collectedTreasure) {
 			// glitter is in one of the surrounding squares
 			lookupTreasureNear(current, unknown_around);
 		}
@@ -124,6 +123,7 @@ public class AIPlayer {
 	
 	private void locateWumpus(){
 		//TODO
+ 
 	}
 
 	private void locatePit() {
@@ -133,6 +133,10 @@ public class AIPlayer {
 			pitCells.add(pitLoc);
 			unknown_around.remove(0);
 		} else if (unknown_around.size() == 4) {
+			return;
+		} else if (unknown_around.size() == 2) {
+			
+		} else if (unknown_around.size() == 3) {
 			
 		}
 		
