@@ -38,23 +38,22 @@ public class AIPlayer {
 		return (exitLoc.getX() != -1 && exitLoc.getY() != -1);
 	}
 
-	public char makeMove(Cell currentCell) {
+	public char makeMove(Cell curCell) {
 		// all methods that help this one should add their moves to plan
 		// in the end the first move of the plan is returned
-		current = currentCell.location;
+		current = curCell.location;
 		visitedLocations.add(current);
-
-		Cell curCell = real_board.getCell(current);
+		ai_board.getBoardObject()[current.getX()][current.getY()] = curCell;
 
 		if (curCell instanceof ExitCell) {
 			exitLoc = current; // remember for future
-			ai_board.getBoardObject()[current.getX()][current.getY()] = new ExitCell(current, ai_board);
+			//ai_board.getBoardObject()[current.getX()][current.getY()] = new ExitCell(current, ai_board);
 		}
 
 		if (curCell instanceof TreasureCell) {
 			if (firstVisit()){
 				collectedTreasure = true;
-				ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
+				//ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
 				plan = new ArrayList<Location>();
 			}
 			if (knowExit()){
@@ -66,8 +65,9 @@ public class AIPlayer {
 		}
 		if (!(curCell instanceof TreasureCell || curCell instanceof ExitCell)){
 		// clearly this is an empty cell since we haven't died yet
-			if (firstVisit())
-				ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
+			if (firstVisit()){
+				//ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
+			}
 		}
 
 		if (plan.size() > 0) {

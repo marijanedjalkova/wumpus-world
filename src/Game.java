@@ -82,25 +82,21 @@ public class Game {
 		if (won()){
 			return;
 		}
-		if (gBoard.getCell(newLocation).smells()){
-			System.out.println("This cell smells!");
-		}
-		if (gBoard.getCell(newLocation).glitters()){
-			System.out.println("This cell glitters!");
-		}
-		if (gBoard.getCell(newLocation).breezes()){
-			System.out.println("This cell breezes!");
-		}
+		gBoard.getCell(newLocation).printPercepts();
+
 	}
 	
 	
 	public void start(){
-		char move;		
+		char move;	
+		Cell currentCell = gBoard.getCell(character.location);
+		System.out.println("Game started:");
 		while (!finished){
 			//take a step
 			gBoard.print();
 			System.out.println("Your step:");
-			move = player.makeMove();
+			currentCell = gBoard.getCell(character.location);
+			move = player.makeMove(currentCell);
 			if (!process(move)){
 				System.out.println("Not valid, try again:");
 				continue;
