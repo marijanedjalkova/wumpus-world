@@ -54,8 +54,10 @@ public class AIPlayer {
 		}
 
 		if (curCell instanceof TreasureCell) {
-			ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
-			plan = new ArrayList<Location>();
+			if (firstVisit()){
+				ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
+				plan = new ArrayList<Location>();
+			}
 			if (knowExit()){
 			// go back
 			// TODO think of a better way
@@ -65,7 +67,8 @@ public class AIPlayer {
 		}
 		if (!(curCell instanceof TreasureCell || curCell instanceof ExitCell)){
 		// clearly this is an empty cell since we haven't died yet
-			ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
+			if (firstVisit())
+				ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
 		}
 
 		if (plan.size() > 0) {
@@ -115,6 +118,10 @@ public class AIPlayer {
 			return moveToChar(current, chooseRandom(known_around).location);
 	}
 	
+	public boolean firstVisit(){
+		return ai_board.getBoardObject()[current.getX()][current.getY()] instanceof UnknownCell;
+	}
+	
 	private void locateWumpus(){
 		//TODO
 	}
@@ -136,7 +143,7 @@ public class AIPlayer {
 		while (count < neighbours.size()) {
 			// inspect all of the neighbour cells
 			if (flag)
-				plan.add(ai_board.getCell(ai_board.getNorth(l)).location);
+				plan.add(neighbours.get(count).location);
 			else {
 				if (count < neighbours.size() - 1)
 					plan.add(l);
