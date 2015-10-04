@@ -103,12 +103,15 @@ public class Board {
 	}
 	
 	public void print(){
+		for (int k = 0; k < 60; k++)
+			System.out.print("-");
+		System.out.println();
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++){
 				boardObject[j][i].print();
 			}
-			System.out.println();
-			for (int k = 0; k < 110; k++)
+			System.out.println("|");
+			for (int k = 0; k < 60; k++)
 				System.out.print("-");
 			System.out.println();
 		}

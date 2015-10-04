@@ -94,10 +94,9 @@ public class AIPlayer {
 		}
 
 		if (curCell.smells()) {
-			// wumpus is near
-			// shoot if can locate? Leave for later
 			locateWumpus();
 		}
+		
 		if (plan.size() > 0)
 			return firstOfPlanned(current);
 		if (unknown_around.size() > 0){
