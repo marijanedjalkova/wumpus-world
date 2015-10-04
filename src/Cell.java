@@ -58,7 +58,7 @@ public abstract class Cell {
 			System.out.print(" ");
 	}
 	
-	private boolean smells(){
+	public boolean smells(){
 		//check if there is wumpus is alive and around
 		Location wumpusLocation = board.game.wumpus.getLocation();
 		if (board.game.wumpus.isAlive()){
@@ -70,7 +70,7 @@ public abstract class Cell {
 		return false;		
 	}
 	
-	private boolean glitters(){
+	public boolean glitters(){
 		//check if there is treasure around 
 		if (board.getCell(board.getNorth(location)) instanceof TreasureCell) return true;
 		if (board.getCell(board.getSouth(location)) instanceof TreasureCell) return true;
@@ -79,7 +79,7 @@ public abstract class Cell {
 		return false;
 	}
 	
-	private boolean breezes(){
+	public boolean breezes(){
 		//check if there is pit around
 		if (board.getCell(board.getNorth(location)) instanceof PitCell) return true;
 		if (board.getCell(board.getSouth(location)) instanceof PitCell) return true;

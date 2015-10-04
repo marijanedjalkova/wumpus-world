@@ -3,24 +3,21 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class AIPlayer {
-	private Game game;
 	private ArrayList<Location> visitedLocations, plan, pitCells;
 	private Location current;
 
 	private Location exitLoc; // may not know
-	private Board ai_board, real_board; // ai's version, will be filled
+	private Board ai_board; // ai's version, will be filled
 										// gradually
 	private ArrayList<Cell> known_around, unknown_around;
 	private boolean collectedTreasure;
 
-	public AIPlayer(Game g) {
-		game = g;
+	public AIPlayer(Board b) {
 		visitedLocations = new ArrayList<Location>();
 		pitCells = new ArrayList<Location>();
 		plan = new ArrayList<Location>(); // for when we have a clear path
 		exitLoc = new Location(-1, -1);
-		ai_board = new Board(game.getBoard().getSize(), game);
-		real_board = game.getBoard();
+		ai_board = b;
 		initialize_ai_board();
 	}
 

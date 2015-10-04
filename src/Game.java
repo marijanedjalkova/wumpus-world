@@ -25,7 +25,8 @@ public class Game {
 		finished = false;
 		stepCount = 0;
 		dictionary = Arrays.asList('n', 's', 'w', 'e', 'u', 'd', 'l', 'r');
-		player = new AIPlayer(this);
+		Board ai_board = new Board(size, this);
+		player = new AIPlayer(ai_board);
 	}
 	
 	public Board getBoard(){
