@@ -21,10 +21,8 @@ public abstract class Cell {
 	public void print(){
 		System.out.print("|");
 		
-		if (this instanceof ExitCell)
-			System.out.print("E");
 		
-		else if (this instanceof PitCell)
+		if (this instanceof PitCell)
 			System.out.print("P");
 
 		else if (board.game.character.getLocation().equalsTo(location))
@@ -40,6 +38,10 @@ public abstract class Cell {
 		
 		if (this instanceof TreasureCell)
 			System.out.print("T");
+		else
+			System.out.print(" ");
+		if (this instanceof ExitCell)
+			System.out.print("E");
 		else
 			System.out.print(" ");
 		if (smells())

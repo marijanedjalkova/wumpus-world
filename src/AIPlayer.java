@@ -131,9 +131,11 @@ public class AIPlayer {
 			Location pitLoc = unknown_around.get(0).location;
 			ai_board.getBoardObject()[pitLoc.getX()][pitLoc.getY()] = new PitCell(pitLoc, ai_board);
 			pitCells.add(pitLoc);
-			visitedLocations.add(pitLoc);
 			unknown_around.remove(0);
+		} else if (unknown_around.size() == 4) {
+			
 		}
+		
 	}
 
 	private void lookupTreasureNear(Location l, ArrayList<Cell> neighbours) {
@@ -200,6 +202,7 @@ public class AIPlayer {
 
 
 	private Cell chooseRandom(ArrayList<Cell> list) {
+		
 		Random rn = new Random();
 		int choice = rn.nextInt(list.size());
 		return list.get(choice);
