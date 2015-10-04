@@ -26,7 +26,7 @@ public class Game {
 		stepCount = 0;
 		dictionary = Arrays.asList('n', 's', 'w', 'e', 'u', 'd', 'l', 'r');
 		ai_board = new Board(size, this);
-		player = new AIPlayer(ai_board, character.location);
+		player = new AIPlayer(ai_board, character.location, gBoard.getCell(character.location));
 	}
 	
 	public Board getBoard(){
@@ -83,22 +83,23 @@ public class Game {
 		if (won()){
 			return;
 		}
-		gBoard.getCell(newLocation).printPercepts();
+		
 
 	}
 	
 	
 	public void start(){
-		gBoard.print(player, true);
+		gBoard.print(player, true, gBoard.getCell(character.location));
 		char move;	
 		Cell currentCell = gBoard.getCell(character.location);
 		System.out.println("Game started: move using NSWE and shoot using UDLR");
 		while (!finished){
-			//take a step
-			ai_board.print(player, false);
-			System.out.println("Your step:");
 			currentCell = gBoard.getCell(character.location);
+			ai_board.print(player, false, currentCell);
+			currentCell.printPercepts();
+			System.out.println("Your step:");
 			move = player.makeMove(currentCell);
+			System.out.println(move);
 			if (!process(move)){
 				System.out.println("Not valid, try again:");
 				continue;

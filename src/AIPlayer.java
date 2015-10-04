@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 public class AIPlayer {
 	public ArrayList<Location> visitedLocations;
 	private ArrayList<Location> plan, pitCells;
-	public Location current;
+	public Location currentLocation;
 
 	private Location exitLoc; // may not know
 	private Board ai_board; // ai's version, will be filled
@@ -13,14 +15,16 @@ public class AIPlayer {
 	private ArrayList<Cell> known_around, unknown_around;
 	private boolean collectedTreasure;
 
-	public AIPlayer(Board b, Location cur) {
+	public AIPlayer(Board b, Location cur, Cell curC) {
 		visitedLocations = new ArrayList<Location>();
 		pitCells = new ArrayList<Location>();
 		plan = new ArrayList<Location>(); // for when we have a clear path
 		exitLoc = new Location(-1, -1);
 		ai_board = b;
-		current = cur;
+		currentLocation = cur;
+		visitedLocations.add(cur);
 		initialize_ai_board();
+		ai_board.getBoardObject()[currentLocation.getX()][currentLocation.getY()] = curC;
 	}
 
 	private void initialize_ai_board() {
@@ -40,19 +44,16 @@ public class AIPlayer {
 	public char makeMove(Cell curCell) {
 		// all methods that help this one should add their moves to plan
 		// in the end the first move of the plan is returned
-		current = curCell.location;
-		visitedLocations.add(current);
-		ai_board.getBoardObject()[current.getX()][current.getY()] = curCell;
+		currentLocation = curCell.location;
+		visitedLocations.add(currentLocation);
+		ai_board.getBoardObject()[currentLocation.getX()][currentLocation.getY()] = curCell;
 
-		if (curCell instanceof ExitCell) {
-			exitLoc = current; // remember for future
-			//ai_board.getBoardObject()[current.getX()][current.getY()] = new ExitCell(current, ai_board);
-		}
+		if (curCell instanceof ExitCell)
+			exitLoc = currentLocation; // remember for future
 
 		if (curCell instanceof TreasureCell) {
 			if (firstVisit()){
 				collectedTreasure = true;
-				//ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
 				plan = new ArrayList<Location>();
 			}
 			if (knowExit()){
@@ -62,25 +63,20 @@ public class AIPlayer {
 			}
 			
 		}
-		if (!(curCell instanceof TreasureCell || curCell instanceof ExitCell)){
-		// clearly this is an empty cell since we haven't died yet
-			if (firstVisit()){
-				//ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
-			}
-		}
 
 		if (plan.size() > 0) {
 			System.out.println("Following the plan");
-			return firstOfPlanned(current);
+			return firstOfPlanned(currentLocation);
 		}
 
-		known_around = lookAround(current, true);
-		unknown_around = lookAround(current, false);
+		known_around = lookAround(currentLocation, true);
+		unknown_around = lookAround(currentLocation, false);
 
 
 		if (curCell.glitters() && !collectedTreasure) {
 			// glitter is in one of the surrounding squares
-			lookupTreasureNear(current, unknown_around);
+			lookupTreasureNear(currentLocation, unknown_around);
+			return firstOfPlanned(currentLocation);
 		}
 
 		if (!curCell.breezes() && !curCell.smells()) {
@@ -89,11 +85,11 @@ public class AIPlayer {
 			// unknown region
 			if (unknown_around.size() > 0) {
 				System.out.println("Empty cell, returning a random unknown");
-				return moveToChar(current, chooseRandom(unknown_around).location);
+				return moveToChar(currentLocation, chooseRandom(unknown_around).location);
 			} else {
 				// TODO find the closest unknown
 				System.out.println("Empty cell, visited all around, returning random");
-				return moveToChar(current, chooseRandom(known_around).location);
+				return moveToChar(currentLocation, chooseRandom(known_around).location);
 			}
 		}
 
@@ -106,18 +102,22 @@ public class AIPlayer {
 		}
 		
 		if (plan.size() > 0){
-			return firstOfPlanned(current);
+			return firstOfPlanned(currentLocation);
 		}
 		if (unknown_around.size() > 0){
 			System.out.println("No plan, returning a random unknown location");
-			return moveToChar(current, chooseRandom(unknown_around).location);
+			return moveToChar(currentLocation, chooseRandom(unknown_around).location);
 		}
 		else
-			return moveToChar(current, chooseRandom(known_around).location);
+			return moveToChar(currentLocation, chooseRandom(known_around).location);
 	}
 	
 	public boolean firstVisit(){
-		return ai_board.getBoardObject()[current.getX()][current.getY()] instanceof UnknownCell;
+		for (int i = 0; i < visitedLocations.size() - 1; i++){
+			if (visitedLocations.get(i).equalsTo(currentLocation))
+				return false;
+		}
+		return true;
 	}
 	
 	private void locateWumpus(){
@@ -155,11 +155,15 @@ public class AIPlayer {
 		boolean flag = true;
 		while (count < neighbours.size()) {
 			// inspect all of the neighbour cells
-			if (flag)
+			if (flag){
+				System.out.println("Adding " + neighbours.get(count).location);
 				plan.add(neighbours.get(count).location);
+			}
 			else {
-				if (count < neighbours.size() - 1)
+				if (count < neighbours.size() - 1){
+					System.out.println("Adding " + l);
 					plan.add(l);
+				}
 				count++;
 			}
 			flag = !flag;
@@ -167,27 +171,42 @@ public class AIPlayer {
 	}
 
 	private ArrayList<Cell> lookAround(Location l, boolean known) {
+	
 		ArrayList<Cell> result = new ArrayList<Cell>();
+		
 		Cell north = ai_board.getCell(ai_board.getNorth(l));
 		if ((north instanceof UnknownCell) != known){
+			
 			if (!(north instanceof PitCell))
 				result.add(north);
-		}
+		} 
+		
 		Cell south = ai_board.getCell(ai_board.getSouth(l));
 		if ((south instanceof UnknownCell) != known){
 			if (!(south instanceof PitCell))
 				result.add(south);
-		}
+		} 
+		
 		Cell east = ai_board.getCell(ai_board.getEast(l));
 		if ((east instanceof UnknownCell) != known){
 			if (!(east instanceof PitCell))
 				result.add(east);
-		}
+		} 
+		
 		Cell west = ai_board.getCell(ai_board.getWest(l));
 		if ((west instanceof UnknownCell) != known){
 			if (!(west instanceof PitCell))
 				result.add(west);
+		} 
+		/*
+		if (known)
+			System.out.println("Printing known neighbours");
+		else
+			System.out.println("Printing unknown neighbours");
+		for (int i = 0; i < result.size(); i++){
+			System.out.println(result.get(i).location.toString());
 		}
+		*/
 		return result;
 	}
 
@@ -214,6 +233,9 @@ public class AIPlayer {
 	}
 
 	private char firstOfPlanned(Location l) {
+		for (int i = 0; i < plan.size(); i++){
+			System.out.println("-" + plan.get(i));
+		}
 		char move = moveToChar(l, plan.get(0));
 		plan.remove(0);
 		return move;
@@ -228,6 +250,7 @@ public class AIPlayer {
 	}
 
 	private char moveToChar(Location l1, Location l2) {
+		System.out.println("Move to char from " + l1 + " to " + l2);
 		if (l1.getX() == l2.getX()) {
 			if (l1.getY() - l2.getY() == 1)
 				return 'n';

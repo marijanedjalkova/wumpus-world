@@ -102,13 +102,16 @@ public class Board {
 		return new Location(x, y);
 	}
 	
-	public void print(AIPlayer player, boolean true_game){
+	public void print(AIPlayer player, boolean true_game, Cell currentCell){
 		for (int k = 0; k < 7* size; k++)
 			System.out.print("-");
 		System.out.println();
 		for (int i = 0; i < size; i++){
 			for (int j = 0; j < size; j++){
-				boardObject[j][i].print(player, true_game);
+				if (currentCell.location.equalsTo(boardObject[j][i].location))
+					currentCell.print(player, true_game);
+				else 
+					boardObject[j][i].print(player, true_game);
 			}
 			System.out.println("|");
 			for (int k = 0; k < 7*size; k++)
@@ -182,7 +185,6 @@ public class Board {
 	
 	public void move(MovingObject object, char d) {
 		Location curLoc = object.getLocation();
-		System.out.println(curLoc);
 		switch (d) {
 		case 'n':
 			if (object instanceof Adventurer)

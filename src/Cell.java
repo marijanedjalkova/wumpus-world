@@ -27,7 +27,7 @@ public abstract class Cell {
 			System.out.print("A");
 		
 		else if (board.game.wumpus.getLocation().equalsTo(location)){
-			if (player.current.equalsTo(location) || debug)
+			if (player.currentLocation.equalsTo(location) || debug)
 				System.out.print("W");
 			else System.out.print(" ");
 		}
