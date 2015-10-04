@@ -53,18 +53,21 @@ public class AIPlayer {
 			ai_board.getBoardObject()[current.getX()][current.getY()] = new ExitCell(current, ai_board);
 		}
 
-		if (curCell instanceof TreasureCell && knowExit()) {
+		if (curCell instanceof TreasureCell) {
+			ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
+			if (knowExit()){
 			// go back
 			// TODO think of a better way
 			pathBackToExit();
-			ai_board.getBoardObject()[current.getX()][current.getY()] = new TreasureCell(current, ai_board);
+			}
+			
 		}
 
 		// clearly this is an empty cell since we haven't died yet
 		ai_board.getBoardObject()[current.getX()][current.getY()] = new EmptyCell(current, ai_board);
 
 		if (plan.size() > 0) {
-			// might want to still process every cell, TODO think!
+			System.out.println("Following the plan");
 			return firstOfPlanned(current);
 		}
 
@@ -82,9 +85,11 @@ public class AIPlayer {
 			// if we have been to all of them, choose the one closest to the
 			// unknown region
 			if (unknown_around.size() > 0) {
+				System.out.println("Empty cell, returning a random unknown");
 				return moveToChar(current, chooseRandom(unknown_around).location);
 			} else {
 				// TODO find the closest unknown
+				System.out.println("Empty cell, visited all around, returning random");
 				return moveToChar(current, chooseRandom(known_around).location);
 			}
 		}
@@ -97,10 +102,11 @@ public class AIPlayer {
 			locateWumpus();
 		}
 		
-		if (plan.size() > 0)
+		if (plan.size() > 0){
 			return firstOfPlanned(current);
+		}
 		if (unknown_around.size() > 0){
-			System.out.println("returning here");
+			System.out.println("No plan, returning a random unknown location");
 			return moveToChar(current, chooseRandom(unknown_around).location);
 		}
 		else
@@ -122,6 +128,7 @@ public class AIPlayer {
 	}
 
 	private void lookupTreasureNear(Location l, ArrayList<Cell> neighbours) {
+		System.out.println("Looking up treasure");
 		int count = 0;
 		boolean flag = true;
 		while (count < neighbours.size()) {
