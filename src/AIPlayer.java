@@ -158,17 +158,25 @@ public class AIPlayer {
 	private ArrayList<Cell> lookAround(Location l, boolean known) {
 		ArrayList<Cell> result = new ArrayList<Cell>();
 		Cell north = ai_board.getCell(ai_board.getNorth(l));
-		if ((north instanceof UnknownCell) != known)
-			result.add(north);
+		if ((north instanceof UnknownCell) != known){
+			if (!(north instanceof PitCell))
+				result.add(north);
+		}
 		Cell south = ai_board.getCell(ai_board.getSouth(l));
-		if ((south instanceof UnknownCell) != known)
-			result.add(south);
+		if ((south instanceof UnknownCell) != known){
+			if (!(south instanceof PitCell))
+				result.add(south);
+		}
 		Cell east = ai_board.getCell(ai_board.getEast(l));
-		if ((east instanceof UnknownCell) != known)
-			result.add(east);
+		if ((east instanceof UnknownCell) != known){
+			if (!(east instanceof PitCell))
+				result.add(east);
+		}
 		Cell west = ai_board.getCell(ai_board.getWest(l));
-		if ((west instanceof UnknownCell) != known)
-			result.add(west);
+		if ((west instanceof UnknownCell) != known){
+			if (!(west instanceof PitCell))
+				result.add(west);
+		}
 		return result;
 	}
 
