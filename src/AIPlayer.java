@@ -206,7 +206,7 @@ public class AIPlayer {
 	}
 
 	private char moveToChar(Location l1, Location l2) {
-		if (l1.getX() == l2.getY()) {
+		if (l1.getX() == l2.getX()) {
 			if (l1.getY() - l2.getY() == 1)
 				return 'n';
 			else
