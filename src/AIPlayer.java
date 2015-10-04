@@ -198,22 +198,6 @@ public class AIPlayer {
 		return move;
 	}
 
-	private char randomMove() {
-		Random rn = new Random();
-		int choice = rn.nextInt(3);
-		switch (choice) {
-		case 0:
-			return 'n';
-		case 1:
-			return 's';
-		case 2:
-			return 'w';
-		case 3:
-			return 'e';
-		default:
-			return 'e';
-		}
-	}
 
 	private Cell chooseRandom(ArrayList<Cell> list) {
 		Random rn = new Random();
