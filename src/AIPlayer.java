@@ -61,36 +61,22 @@ public class AIPlayer {
 			// TODO think of a better way
 				pathBackToExit();
 			}
-			
-		}
-
-		if (plan.size() > 0) {
-			System.out.println("Following the plan");
-			return firstOfPlanned(currentLocation);
 		}
 
 		known_around = lookAround(currentLocation, true);
 		unknown_around = lookAround(currentLocation, false);
 
-
+		
 		if (curCell.glitters() && !collectedTreasure) {
 			// glitter is in one of the surrounding squares
 			lookupTreasureNear(currentLocation, unknown_around);
-			return firstOfPlanned(currentLocation);
 		}
 
 		if (!curCell.breezes() && !curCell.smells()) {
 			// choose a random one from the cells we haven't been to yet
 			// if we have been to all of them, choose the one closest to the
 			// unknown region
-			if (unknown_around.size() > 0) {
-				System.out.println("Empty cell, returning a random unknown");
-				return moveToChar(currentLocation, chooseRandom(unknown_around).location);
-			} else {
-				// TODO find the closest unknown
-				System.out.println("Empty cell, visited all around, returning random");
-				return moveToChar(currentLocation, chooseRandom(known_around).location);
-			}
+			
 		}
 
 		if (curCell.breezes()) {
