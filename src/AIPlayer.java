@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
-
-import javax.swing.plaf.synth.SynthSpinnerUI;
 
 public class AIPlayer {
 	public ArrayList<Location> visitedLocations;
@@ -126,6 +123,13 @@ public class AIPlayer {
 	}
 
 	private void locatePit() {
+		//check if we know a pit already
+		//TODO think what happens if there is more than 1 pit
+		for (int i = 0; i < known_around.size(); i++){
+			if (known_around.get(i) instanceof PitCell){
+				return;
+			}
+		}
 		if (unknown_around.size() > 1 ){
 			int count = 0;
 			while (count < unknown_around.size()){
@@ -135,7 +139,7 @@ public class AIPlayer {
 					unknown_around.remove(count);
 					count--;
 				}
-				count++;
+				count++; 
 			}
 
 			
