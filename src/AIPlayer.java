@@ -126,19 +126,64 @@ public class AIPlayer {
 	}
 
 	private void locatePit() {
+		if (unknown_around.size() > 1 ){
+			int count = 0;
+			while (count < unknown_around.size()){
+				double danger = inspectUnknown(unknown_around.get(count));
+				if (danger == 0){
+					plan.add(unknown_around.get(count).location);//?
+					unknown_around.remove(count);
+					count--;
+				}
+				count++;
+			}
+
+			
+		}
 		if (unknown_around.size() == 1) {
 			Location pitLoc = unknown_around.get(0).location;
 			ai_board.getBoardObject()[pitLoc.getX()][pitLoc.getY()] = new PitCell(pitLoc, ai_board);
 			pitCells.add(pitLoc);
 			unknown_around.remove(0);
-		} else if (unknown_around.size() == 4) {
+		} else {
 			return;
-		} else if (unknown_around.size() == 2) {
-			
-		} else if (unknown_around.size() == 3) {
-			
+		} 
+	}
+	
+	public double inspectUnknown(Cell cell){
+		//0 means safe, 1 - definitely Pit
+		Location l = cell.location;
+		Cell north = ai_board.getCell(ai_board.getNorth(l));
+		ArrayList<Cell> known = new ArrayList<Cell>();
+		if (!(north instanceof UnknownCell)){
+			known.add(north);
+		} 
+		
+		Cell south = ai_board.getCell(ai_board.getSouth(l));
+		if (!(south instanceof UnknownCell)){
+			known.add(south);
+		} 
+		
+		Cell east = ai_board.getCell(ai_board.getEast(l));
+		if (!(east instanceof UnknownCell)){
+			known.add(east);
+		} 
+		
+		Cell west = ai_board.getCell(ai_board.getWest(l));
+		if (!(west instanceof UnknownCell)){
+			known.add(west);
+		} 
+		//known can't be empty cause there is current player cell
+		//which is breezy
+		
+		for (int i = 0; i < known.size(); i++){
+			if (!(known.get(i).breezes())){
+				//cell is safe
+				return 0;
+			}
 		}
 		
+		return 0.5;
 	}
 	
 	public boolean visited(Location l){
