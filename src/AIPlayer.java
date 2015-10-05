@@ -118,8 +118,21 @@ public class AIPlayer {
 	}
 	
 	private void locateWumpus(){
-		//TODO
+		ArrayList<Cell> diags = getDiagonals(currentLocation);
  
+	}
+	
+	private ArrayList<Cell> getDiagonals(Location l){
+		ArrayList<Cell> result = new ArrayList<Cell>();
+		Cell diag1 = ai_board.getCell(ai_board.getNorth(ai_board.getEast(l)));
+		Cell diag2 = ai_board.getCell(ai_board.getNorth(ai_board.getWest(l)));
+		Cell diag3 = ai_board.getCell(ai_board.getSouth(ai_board.getEast(l)));
+		Cell diag4 = ai_board.getCell(ai_board.getSouth(ai_board.getWest(l)));
+		result.add(diag1);
+		result.add(diag2);
+		result.add(diag3);
+		result.add(diag4);
+		return result;
 	}
 
 	private void locatePit() {
