@@ -32,6 +32,7 @@ public class AIPlayer {
 			}
 		}
 		ai_board.setBoardObject(array);
+		
 	}
 
 	boolean knowExit() {
@@ -119,7 +120,21 @@ public class AIPlayer {
 	
 	private void locateWumpus(){
 		ArrayList<Cell> diags = getDiagonals(currentLocation);
- 
+		int count = 0;
+		while (count < diags.size()){
+			Cell thisCell = diags.get(count);
+			if(true){
+				diags.remove(count);
+				count--;
+			}
+			count++;
+		}
+		//now we are left with smelly cells
+		if (diags.size() == 0){
+			//all of them are unknown
+		} else {
+			
+		}
 	}
 	
 	private ArrayList<Cell> getDiagonals(Location l){
