@@ -176,7 +176,6 @@ public class AIPlayer {
 		
 		Cell north = ai_board.getCell(ai_board.getNorth(l));
 		if ((north instanceof UnknownCell) != known){
-			
 			if (!(north instanceof PitCell))
 				result.add(north);
 		} 
@@ -198,15 +197,7 @@ public class AIPlayer {
 			if (!(west instanceof PitCell))
 				result.add(west);
 		} 
-		/*
-		if (known)
-			System.out.println("Printing known neighbours");
-		else
-			System.out.println("Printing unknown neighbours");
-		for (int i = 0; i < result.size(); i++){
-			System.out.println(result.get(i).location.toString());
-		}
-		*/
+		
 		return result;
 	}
 
