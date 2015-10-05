@@ -136,24 +136,60 @@ public class AIPlayer {
 			count++;
 		}
 		if (smellyKnowns.size() == 2){
-			int wumpusY = (smellyKnowns.get(0).location.getY() + smellyKnowns.get(1).location.getY())/2;
-			int wumpusX = (smellyKnowns.get(0).location.getX() + smellyKnowns.get(1).location.getX())/2;
-			ai_board.getBoardObject()[wumpusX][wumpusY] = new PitCell(wumpusX, wumpusY, ai_board);
-			for (int i = 0; i < unknown_around.size(); i++){
-				if (unknown_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
-					unknown_around.remove(i);
-					break;
-				}
-			}
-			for (int i = 0; i < known_around.size(); i++){
-				if (known_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
-					known_around.remove(i);
-					break;
-				}
-			}
+			locateWith3Knowns(smellyKnowns.get(0), smellyKnowns.get(1));
 			return;
-		}  else {
+		}  else if (smellyKnowns.size() == 1) {
+			locateWith2Knowns(smellyKnowns.get(0));
+			return;
+		} else if (smellyKnowns.size() == 0) {
+			//they are all unknown or not smelly
+			//can't be all not smelly max 3, then at least 1 unknown, but can't all be unknowns, too
+			if (unknowns.size()==2){
+				locateWith3Knowns(unknowns.get(0), unknowns.get(1));
+				return;
+			} else if (unknowns.size() == 3){
+				//3 unknowns and 1 not smelly
+				//go back
+				plan.add(visitedLocations.get(visitedLocations.size() - 2));
+			} else {
+				//1 unknown and 3 not smelly
+				locateWith2Knowns(unknowns.get(0));
+				return;
+			}
 			
+		}
+	}
+	
+	private void locateWith2Knowns(Cell c){
+		//finds the danger when percepts are in current cell and a diagonal neighbour
+		int x1 = currentLocation.getX();
+		int x2 = c.location.getX();
+		int y1 = currentLocation.getY();
+		int y2 = c.location.getY();
+		Location l1 = new Location(x1, y2);
+		Location l2 = new Location(x2, y1);
+		//TODO replace by something better than assuming both as danger
+		ai_board.getBoardObject()[l1.getX()][l1.getY()] = new PitCell(l1, ai_board);
+		ai_board.getBoardObject()[l2.getX()][l2.getY()] = new PitCell(l2, ai_board);
+		
+	}
+	
+	private void locateWith3Knowns(Cell c1, Cell c2){
+		//finds the danger when percepts are in current cell and two diagonal neighbours
+		int wumpusY = (c1.location.getY() + c2.location.getY())/2;
+		int wumpusX = (c1.location.getX() + c2.location.getX())/2;
+		ai_board.getBoardObject()[wumpusX][wumpusY] = new PitCell(wumpusX, wumpusY, ai_board);
+		for (int i = 0; i < unknown_around.size(); i++){
+			if (unknown_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
+				unknown_around.remove(i);
+				break;
+			}
+		}
+		for (int i = 0; i < known_around.size(); i++){
+			if (known_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
+				known_around.remove(i);
+				break;
+			}
 		}
 	}
 	
