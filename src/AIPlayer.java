@@ -119,20 +119,40 @@ public class AIPlayer {
 	}
 	
 	private void locateWumpus(){
-		ArrayList<Cell> diags = getDiagonals(currentLocation);
+		ArrayList<Cell> diags = getDiagonals(currentLocation);	
+		ArrayList<Cell> smellyKnowns = new ArrayList<Cell>();
+		ArrayList<Cell> notSmellyKnowns = new ArrayList<Cell>();
+		ArrayList<Cell> unknowns = new ArrayList<Cell>();
 		int count = 0;
 		while (count < diags.size()){
 			Cell thisCell = diags.get(count);
-			if(true){
-				diags.remove(count);
-				count--;
+			if(!(thisCell instanceof UnknownCell) && thisCell.smells()){
+				smellyKnowns.add(thisCell);
+			} else if (thisCell instanceof UnknownCell){
+				unknowns.add(thisCell);
+			} else {
+				notSmellyKnowns.add(thisCell);
 			}
 			count++;
 		}
-		//now we are left with smelly cells
-		if (diags.size() == 0){
-			//all of them are unknown
-		} else {
+		if (smellyKnowns.size() == 2){
+			int wumpusY = (smellyKnowns.get(0).location.getY() + smellyKnowns.get(1).location.getY())/2;
+			int wumpusX = (smellyKnowns.get(0).location.getX() + smellyKnowns.get(1).location.getX())/2;
+			ai_board.getBoardObject()[wumpusX][wumpusY] = new PitCell(wumpusX, wumpusY, ai_board);
+			for (int i = 0; i < unknown_around.size(); i++){
+				if (unknown_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
+					unknown_around.remove(i);
+					break;
+				}
+			}
+			for (int i = 0; i < known_around.size(); i++){
+				if (known_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
+					known_around.remove(i);
+					break;
+				}
+			}
+			return;
+		}  else {
 			
 		}
 	}
@@ -311,9 +331,14 @@ public class AIPlayer {
 
 
 	private Cell chooseRandom(ArrayList<Cell> list) {
-		
+		if (list.size()==1)
+			return list.get(0);
 		Random rn = new Random();
 		int choice = rn.nextInt(list.size());
+		if (list.get(choice) instanceof PitCell){
+			list.remove(choice);
+			return chooseRandom(list);
+		}
 		return list.get(choice);
 	}
 
