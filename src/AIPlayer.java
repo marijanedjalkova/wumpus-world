@@ -139,7 +139,7 @@ public class AIPlayer {
 			locateWith3Knowns(smellyKnowns.get(0), smellyKnowns.get(1));
 			return;
 		}  else if (smellyKnowns.size() == 1) {
-			locateWith2Knowns(smellyKnowns.get(0));
+			locateWith2Knowns(ai_board.getCell(currentLocation), smellyKnowns.get(0));
 			return;
 		} else if (smellyKnowns.size() == 0) {
 			//they are all unknown or not smelly
@@ -153,19 +153,19 @@ public class AIPlayer {
 				plan.add(visitedLocations.get(visitedLocations.size() - 2));
 			} else {
 				//1 unknown and 3 not smelly
-				locateWith2Knowns(unknowns.get(0));
+				locateWith2Knowns(ai_board.getCell(currentLocation), unknowns.get(0));
 				return;
 			}
 			
 		}
 	}
 	
-	private void locateWith2Knowns(Cell c){
-		//finds the danger when percepts are in current cell and a diagonal neighbour
-		int x1 = currentLocation.getX();
-		int x2 = c.location.getX();
-		int y1 = currentLocation.getY();
-		int y2 = c.location.getY();
+	private void locateWith2Knowns(Cell c1, Cell c2){
+		//finds the danger when percepts are in 2 diagonal cells
+		int x1 = c1.location.getX();
+		int x2 = c2.location.getX();
+		int y1 = c1.location.getY();
+		int y2 = c2.location.getY();
 		Location l1 = new Location(x1, y2);
 		Location l2 = new Location(x2, y1);
 		//TODO replace by something better than assuming both as danger
@@ -175,7 +175,7 @@ public class AIPlayer {
 	}
 	
 	private void locateWith3Knowns(Cell c1, Cell c2){
-		//finds the danger when percepts are in current cell and two diagonal neighbours
+		//finds the danger when percepts are in 3 near cells forming a triangle
 		int wumpusY = (c1.location.getY() + c2.location.getY())/2;
 		int wumpusX = (c1.location.getX() + c2.location.getX())/2;
 		ai_board.getBoardObject()[wumpusX][wumpusY] = new PitCell(wumpusX, wumpusY, ai_board);
