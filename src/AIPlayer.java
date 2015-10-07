@@ -354,7 +354,11 @@ public class AIPlayer {
 				return;
 			}
 		}
-		if (unknown_around.size() > 1) {
+		if(unknown_around.size()== 3 ){
+			plan.add(visitedLocations.get(visitedLocations.size()-2));
+			return;
+		}
+		if (unknown_around.size() == 2) {
 			int count = 0;
 			while (count < unknown_around.size()) {
 				double danger = inspectUnknown(unknown_around.get(count));
