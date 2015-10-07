@@ -1,12 +1,15 @@
 
 public class UnknownCell extends Cell {
+	public boolean dangerous;
 
 	public UnknownCell(int x, int y, Board b) {
 		super(x, y, b);
+		dangerous = false;
 	}
 	
 	public UnknownCell(Location l, Board b) {
 		super(l, b);
+		dangerous = false;
 	}
 	
 	public boolean smells(){
@@ -20,5 +23,6 @@ public class UnknownCell extends Cell {
 	public boolean glitters(){
 		return false;
 	}
+
 
 }

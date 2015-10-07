@@ -19,6 +19,10 @@ public abstract class Cell {
 	}
 	
 	public void print(AIPlayer player, boolean debug){
+		if (this instanceof UnknownCell){
+			System.out.print("|  ??? ");
+			return;
+		}
 		System.out.print("|");
 		
 		if (this instanceof PitCell)

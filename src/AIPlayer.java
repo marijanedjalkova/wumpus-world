@@ -6,7 +6,7 @@ public class AIPlayer {
 	private ArrayList<Location> plan, pitCells;
 	public Location currentLocation;
 
-	private Location exitLoc; // may not know
+	private Location exitLoc; // doesn't always know
 	private Board ai_board; // ai's version, will be filled
 										// gradually
 	private ArrayList<Cell> known_around, unknown_around;
@@ -35,13 +35,50 @@ public class AIPlayer {
 		
 	}
 
-	boolean knowExit() {
+	private boolean knowExit() {
 		return (exitLoc.getX() != -1 && exitLoc.getY() != -1);
+	}
+	
+	private void analyze_board(){
+		for (int i = 0; i < ai_board.getSize(); i++){
+			for (int j = 0; j < ai_board.getSize(); j++){
+				Cell current = ai_board.getCell(j, i);
+				if (current.breezes()){
+					ArrayList<Cell> diags = getDiagonals(current.location);
+					checkTriangle(diags, current);
+				}
+			}
+		}
+	}
+	
+	private void checkTriangle(ArrayList<Cell> diags, Cell c){
+		int count = 0;
+		while (count < diags.size()){
+			if (!diags.get(count).breezes()){
+				diags.remove(count);
+				count--;
+			}
+			count++;
+		}
+		if (diags.size() == 2){
+			Location l1 = diags.get(0).location;
+			Location l2 = diags.get(1).location;
+			if (l1.getX() == l2.getX() || l1.getY()==l2.getY()){
+				locateWith3Knowns(diags.get(0), diags.get(1));
+				
+			}
+		} else if (diags.size() == 1){
+			locateWith2Knowns(c, diags.get(0));
+		}
+		
 	}
 
 	public char makeMove(Cell curCell) {
 		// all methods that help this one should add their moves to plan
 		// in the end the first move of the plan is returned
+		
+		analyze_board();
+		
 		currentLocation = curCell.location;
 		visitedLocations.add(currentLocation);
 		ai_board.getBoardObject()[currentLocation.getX()][currentLocation.getY()] = curCell;
@@ -169,16 +206,21 @@ public class AIPlayer {
 		Location l1 = new Location(x1, y2);
 		Location l2 = new Location(x2, y1);
 		//TODO replace by something better than assuming both as danger
-		ai_board.getBoardObject()[l1.getX()][l1.getY()] = new PitCell(l1, ai_board);
-		ai_board.getBoardObject()[l2.getX()][l2.getY()] = new PitCell(l2, ai_board);
-		
+		if (ai_board.getCell(l1) instanceof UnknownCell && !(ai_board.getCell(l2) instanceof UnknownCell)){
+			ai_board.getBoardObject()[l1.getX()][l1.getY()] = new PitCell(l1, ai_board);
+		} else if (ai_board.getCell(l2) instanceof UnknownCell && !(ai_board.getCell(l1) instanceof UnknownCell)){
+			ai_board.getBoardObject()[l2.getX()][l2.getY()] = new PitCell(l2, ai_board);
+		} else {
+			ai_board.getBoardObject()[l1.getX()][l1.getY()] = new DangerousCell(l1, ai_board);
+			ai_board.getBoardObject()[l2.getX()][l2.getY()] = new DangerousCell(l2, ai_board);
+		}
 	}
 	
 	private void locateWith3Knowns(Cell c1, Cell c2){
 		//finds the danger when percepts are in 3 near cells forming a triangle
 		int wumpusY = (c1.location.getY() + c2.location.getY())/2;
 		int wumpusX = (c1.location.getX() + c2.location.getX())/2;
-		ai_board.getBoardObject()[wumpusX][wumpusY] = new PitCell(wumpusX, wumpusY, ai_board);
+		ai_board.getBoardObject()[wumpusX][wumpusY] = new DangerousCell(wumpusX, wumpusY, ai_board);
 		for (int i = 0; i < unknown_around.size(); i++){
 			if (unknown_around.get(i).location.equalsTo(ai_board.getCell(wumpusX, wumpusY).location)){
 				unknown_around.remove(i);

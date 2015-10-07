@@ -26,7 +26,7 @@ public class Board {
 		//place landscape
 		placeExit();
 		placeTreasure();
-		placePits(size * complexity / 5);
+		placePits(complexity);
 		
 		checkPits();
 
