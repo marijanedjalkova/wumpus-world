@@ -31,8 +31,7 @@ public class Game {
 	 *            - how complicated on a scale from 1 to 10 the game is. Mainly
 	 *            affects the number of pits.
 	 */
-	public Game(int complexity) {
-		int size = 10;
+	public Game(int complexity, int size) {
 		character = new Adventurer(-1, -1, this);
 
 		wumpus = new Wumpus(-1, -1, this);
