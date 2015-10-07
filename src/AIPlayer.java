@@ -409,11 +409,11 @@ public class AIPlayer {
 
 
 	private Cell chooseRandom(ArrayList<Cell> list) {
-		if (list.size()==1)
-			return list.get(0);
+		if (list.size()==0)
+			return ai_board.getCell(visitedLocations.get(visitedLocations.size() - 2));
 		Random rn = new Random();
 		int choice = rn.nextInt(list.size());
-		if (list.get(choice) instanceof PitCell){
+		if (list.get(choice) instanceof PitCell || list.get(choice) instanceof DangerousCell){
 			list.remove(choice);
 			return chooseRandom(list);
 		}
